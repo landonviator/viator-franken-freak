@@ -53,7 +53,6 @@ void FrankenSynthVoice::setOscType(OscType newOscType)
     {
         case OscType::kSin:
         {
-            _osc1Gain.setGainDecibels(gain - 3.0);
             _osc1.reset();
             _osc1.initialise([this](float x){return std::sin(x);});
             break;
@@ -61,17 +60,15 @@ void FrankenSynthVoice::setOscType(OscType newOscType)
             
         case OscType::kSquare:
         {
-            _osc1Gain.setGainDecibels(gain - 24.0);
             _osc1.reset();
-            _osc1.initialise([this](float x){return x >= 0 ? 1.0 : -1.0;});
+            _osc1.initialise([this](float x){return x >= 0 ? 1.0 * waveCompensate : -1.0 * waveCompensate;});
             break;
         }
             
         case OscType::kSaw:
         {
-            _osc1Gain.setGainDecibels(gain - 24.0);
             _osc1.reset();
-            _osc1.initialise([this](float x){return juce::jmap(static_cast<float>(x), -juce::MathConstants<float>::pi, juce::MathConstants<float>::pi, -1.0f, 1.0f);});
+            _osc1.initialise([this](float x){return juce::jmap(static_cast<float>(x), -juce::MathConstants<float>::pi, juce::MathConstants<float>::pi, -1.0f * waveCompensate, 1.0f * waveCompensate);});
             break;
         }
     }
@@ -80,12 +77,27 @@ void FrankenSynthVoice::setOscType(OscType newOscType)
 void FrankenSynthVoice::setOscParams(float osc1Volume)
 {
     gain = osc1Volume;
-    _osc1Gain.setGainDecibels(gain);
 }
 
 void FrankenSynthVoice::setOscTune(int newTuneInterval)
 {
     tune = newTuneInterval;
+}
+
+void FrankenSynthVoice::setOscTimbre(float newTimbre)
+{
+    timbre = newTimbre;
+    
+    // compensate the volume drop between 1 and 3 by double
+    if (timbre < 3.0)
+    {
+        timbreCompensate = juce::jmap(timbre, 3.0f, 1.0f, 0.55f, 1.1f);
+    }
+    
+    else
+    {
+        timbreCompensate = 0.55;
+    }
 }
 
 void FrankenSynthVoice::prepareToPlay(double samplerate, int samplesPerBlock, int numOutputChannels)
@@ -96,6 +108,9 @@ void FrankenSynthVoice::prepareToPlay(double samplerate, int samplesPerBlock, in
     
     _osc1.prepare(_spec);
     _osc1.reset();
+    
+    _carrierOsc.prepare(_spec);
+    _carrierOsc.reset();
     
     _osc1Gain.prepare(_spec);
     _osc1Gain.setRampDurationSeconds(0.01);
@@ -112,8 +127,14 @@ void FrankenSynthVoice::renderNextBlock (juce::AudioBuffer<float> &outputBuffer,
     _synthBuffer.clear();
     
     juce::dsp::AudioBlock<float> block {_synthBuffer};
+    _osc1Gain.setGainDecibels(gain);
+    
     _osc1.process(juce::dsp::ProcessContextReplacing<float>(block));
+    
+    applyTimbre(block);
+    
     _osc1Gain.process(juce::dsp::ProcessContextReplacing<float>(block));
+    
     _adsr.applyEnvelopeToBuffer(_synthBuffer, 0, _synthBuffer.getNumSamples());
     
     for (int channel = 0; channel < outputBuffer.getNumChannels(); ++channel)
@@ -123,6 +144,24 @@ void FrankenSynthVoice::renderNextBlock (juce::AudioBuffer<float> &outputBuffer,
         if (!_adsr.isActive())
         {
             clearCurrentNote();
+        }
+    }
+}
+
+void FrankenSynthVoice::applyTimbre(juce::dsp::AudioBlock<float> &block)
+{
+    for (int channel = 0; channel < block.getNumChannels(); ++channel)
+    {
+        auto* data = block.getChannelPointer(channel);
+        
+        for (int sample = 0; sample < block.getNumSamples(); ++sample)
+        {
+            auto x = data[sample];
+            
+            if (_oscType == OscType::kSin)
+            {
+                data[sample] = (std::tanh(-timbre * x + x) - std::tanh(pow(x, 3.0f))) * timbreCompensate;
+            }
         }
     }
 }

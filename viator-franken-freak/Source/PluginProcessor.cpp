@@ -123,22 +123,21 @@ juce::AudioProcessorValueTreeState::ParameterLayout ViatorfrankenfreakAudioProce
     for (int i = 0; i < _parameterMap.getSliderParams().size(); i++)
     {
         auto param = _parameterMap.getSliderParams()[i];
-
-        if (param.isInt == ViatorParameters::SliderParameterData::NumericType::kInt || param.isSkew == ViatorParameters::SliderParameterData::SkewType::kSkew)
+        auto range = juce::NormalisableRange<float>(param.min, param.max);
+        
+        if (param.isSkew == ViatorParameters::SliderParameterData::SkewType::kSkew)
         {
-            auto range = juce::NormalisableRange<float>(param.min, param.max);
-
-            if (param.isSkew == ViatorParameters::SliderParameterData::SkewType::kSkew)
-            {
-                range.setSkewForCentre(param.center);
-            }
-
-            params.push_back (std::make_unique<juce::AudioProcessorValueTreeState::Parameter>(juce::ParameterID { param.paramID, _versionNumber }, param.paramName, param.paramName, range, param.initial, valueToTextFunction, textToValueFunction));
+            range.setSkewForCentre(param.center);
         }
 
+        if (param.isInt == ViatorParameters::SliderParameterData::NumericType::kInt)
+        {
+            params.push_back (std::make_unique<juce::AudioProcessorValueTreeState::Parameter>(juce::ParameterID { param.paramID, _versionNumber }, param.paramName, param.paramName, range, param.initial, valueToTextFunction, textToValueFunction));
+        }
+        
         else
         {
-            params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { param.paramID, _versionNumber }, param.paramName, param.min, param.max, param.initial));
+            params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { param.paramID, _versionNumber }, param.paramName, range, param.initial));
         }
     }
     
@@ -195,6 +194,7 @@ void ViatorfrankenfreakAudioProcessor::updateParameters()
     
     auto osc1Volume = _treeState.getRawParameterValue(ViatorParameters::osc1GainID)->load();
     auto osc1Tune = _treeState.getRawParameterValue(ViatorParameters::osc1TuneID)->load();
+    auto osc1Timbre = _treeState.getRawParameterValue(ViatorParameters::osc1TimbreID)->load();
     
     for (int i = 0; i < _frankenFreak.getNumVoices(); i++)
     {
@@ -204,6 +204,7 @@ void ViatorfrankenfreakAudioProcessor::updateParameters()
             voice->setADSRParams(attack, decay, sustain, release);
             voice->setOscParams(osc1Volume);
             voice->setOscTune(osc1Tune);
+            voice->setOscTimbre(osc1Timbre);
         }
     }
 }

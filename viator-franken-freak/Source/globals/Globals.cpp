@@ -6,6 +6,9 @@ namespace ViatorParameters
 extern const juce::String osc1TuneID = "osc1TuneID";
 extern const juce::String osc1TuneName = "osc1TuneName";
 
+extern const juce::String osc1TimbreID = "osc1TimbreID";
+extern const juce::String osc1TimbreName = "osc1TimbreName";
+
 extern const juce::String osc1GainID = "osc1GainID";
 extern const juce::String osc1GainName = "osc1GainName";
 
