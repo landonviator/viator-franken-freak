@@ -12,5 +12,32 @@ public:
     void stopNote (float velocity, bool allowTailOff) override;
     void pitchWheelMoved (int newPitchWheelValue) override;
     void controllerMoved (int controllerNumber, int newControllerValue) override;
+    void prepareToPlay(double samplerate, int samplesPerBlock, int numOutputChannels);
     void renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int startSample, int numSamples) override;
+    
+    void setADSRParams(float attack, float decay, float sustain, float release);
+    void setOscParams(float osc1Volume);
+    
+    enum class OscType
+    {
+        kSin,
+        kSquare,
+        kSaw
+    };
+    
+    void setOscType(OscType newOscType);
+    
+    
+private:
+    juce::dsp::ProcessSpec _spec;
+    juce::dsp::Oscillator<float> _osc1 {[this](float x){return std::sin(x);}};
+    juce::dsp::Gain<float> _osc1Gain;
+    juce::ADSR _adsr;
+    juce::ADSR::Parameters _adsrParams;
+    juce::AudioBuffer<float> _synthBuffer;
+    
+    OscType _oscType = OscType::kSin;
+    static constexpr float _piInv = 1.0 / juce::MathConstants<float>::pi;
+    
+    float gain = 0.0;
 };

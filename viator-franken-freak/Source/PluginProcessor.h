@@ -2,8 +2,10 @@
 #include <JuceHeader.h>
 #include "DSP/SynthSound.h"
 #include "DSP/SynthVoice.h"
+#include "globals/Parameters.h"
 
 class ViatorfrankenfreakAudioProcessor  : public juce::AudioProcessor
+, public juce::AudioProcessorValueTreeState::Listener
 {
 public:
     //==============================================================================
@@ -42,10 +44,24 @@ public:
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+    
+    // parameters
+    ViatorParameters::Params _parameterMap;
+    juce::AudioProcessorValueTreeState _treeState;
 
 private:
     
-    juce::Synthesiser _frankenFreak;	
+    juce::Synthesiser _frankenFreak;
+    
+    // parameters
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    void parameterChanged (const juce::String& parameterID, float newValue) override;
+    using Parameter = juce::AudioProcessorValueTreeState::Parameter;
+    static juce::String valueToTextFunction(float x) { return juce::String(static_cast<int>(x)); }
+    static float textToValueFunction(const juce::String& str) { return str.getFloatValue(); }
+    void updateParameters();
+    
+    const int _versionNumber = 1;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ViatorfrankenfreakAudioProcessor)
 };

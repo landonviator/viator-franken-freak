@@ -7,14 +7,50 @@ ViatorfrankenfreakAudioProcessor::ViatorfrankenfreakAudioProcessor()
      : AudioProcessor (BusesProperties()
                        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true))
+, _treeState(*this, nullptr, "PARAMETERS", createParameterLayout())
 #endif
 {
     _frankenFreak.addSound(new FrankenSynthSound());
     _frankenFreak.addVoice(new FrankenSynthVoice());
+    
+    // sliders
+    for (int i = 0; i < _parameterMap.getSliderParams().size(); i++)
+    {
+        _treeState.addParameterListener(_parameterMap.getSliderParams()[i].paramID, this);
+    }
+    
+    // buttons
+    for (int i = 0; i < _parameterMap.getButtonParams().size(); i++)
+    {
+        _treeState.addParameterListener(_parameterMap.getButtonParams()[i].paramID, this);
+    }
+    
+    // menus
+    for (int i = 0; i < _parameterMap.getMenuParams().size(); i++)
+    {
+        _treeState.addParameterListener(_parameterMap.getMenuParams()[i].paramID, this);
+    }
 }
 
 ViatorfrankenfreakAudioProcessor::~ViatorfrankenfreakAudioProcessor()
 {
+    // sliders
+    for (int i = 0; i < _parameterMap.getSliderParams().size(); i++)
+    {
+        _treeState.removeParameterListener(_parameterMap.getSliderParams()[i].paramID, this);
+    }
+    
+    // buttons
+    for (int i = 0; i < _parameterMap.getButtonParams().size(); i++)
+    {
+        _treeState.removeParameterListener(_parameterMap.getButtonParams()[i].paramID, this);
+    }
+    
+    // menus
+    for (int i = 0; i < _parameterMap.getMenuParams().size(); i++)
+    {
+        _treeState.removeParameterListener(_parameterMap.getMenuParams()[i].paramID, this);
+    }
 }
 
 //==============================================================================
@@ -79,10 +115,110 @@ void ViatorfrankenfreakAudioProcessor::changeProgramName (int index, const juce:
 {
 }
 
+juce::AudioProcessorValueTreeState::ParameterLayout ViatorfrankenfreakAudioProcessor::createParameterLayout()
+{
+    std::vector <std::unique_ptr<juce::RangedAudioParameter>> params;
+    
+    // sliders
+    for (int i = 0; i < _parameterMap.getSliderParams().size(); i++)
+    {
+        auto param = _parameterMap.getSliderParams()[i];
+
+        if (param.isInt == ViatorParameters::SliderParameterData::NumericType::kInt || param.isSkew == ViatorParameters::SliderParameterData::SkewType::kSkew)
+        {
+            auto range = juce::NormalisableRange<float>(param.min, param.max);
+
+            if (param.isSkew == ViatorParameters::SliderParameterData::SkewType::kSkew)
+            {
+                range.setSkewForCentre(param.center);
+            }
+
+            params.push_back (std::make_unique<juce::AudioProcessorValueTreeState::Parameter>(juce::ParameterID { param.paramID, _versionNumber }, param.paramName, param.paramName, range, param.initial, valueToTextFunction, textToValueFunction));
+        }
+
+        else
+        {
+            params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { param.paramID, _versionNumber }, param.paramName, param.min, param.max, param.initial));
+        }
+    }
+    
+    // buttons
+    for (int i = 0; i < _parameterMap.getButtonParams().size(); i++)
+    {
+        auto param = _parameterMap.getButtonParams()[i];
+        params.push_back (std::make_unique<juce::AudioParameterBool>(juce::ParameterID { param.paramID, _versionNumber }, param.paramName, _parameterMap.getButtonParams()[i].initial));
+    }
+    
+    // menus
+    for (int i = 0; i < _parameterMap.getMenuParams().size(); i++)
+    {
+        auto param = _parameterMap.getMenuParams()[i];
+        params.push_back (std::make_unique<juce::AudioParameterChoice>(juce::ParameterID { param.paramID, _versionNumber }, param.paramName, param.choices, param.defaultIndex));
+    }
+    
+    return { params.begin(), params.end() };
+}
+
+void ViatorfrankenfreakAudioProcessor::parameterChanged(const juce::String &parameterID, float newValue)
+
+{
+    if (_frankenFreak.getSampleRate() < 44100.0f)
+        return;
+    
+    if (parameterID == ViatorParameters::osc1ChoiceID)
+    {
+        auto oscType = static_cast<FrankenSynthVoice::OscType>(_treeState.getRawParameterValue(ViatorParameters::osc1ChoiceID)->load());
+        
+        for (int i = 0; i < _frankenFreak.getNumVoices(); i++)
+        {
+            if (auto voice = dynamic_cast<FrankenSynthVoice*>(_frankenFreak.getVoice(i)))
+            {
+                
+                voice->setOscType(oscType);
+            }
+        }
+    }
+    
+    else
+    {
+        updateParameters();
+    }
+    
+}
+
+void ViatorfrankenfreakAudioProcessor::updateParameters()
+{
+    auto attack = _treeState.getRawParameterValue(ViatorParameters::attackID)->load();
+    auto decay = _treeState.getRawParameterValue(ViatorParameters::decayID)->load();
+    auto sustain = _treeState.getRawParameterValue(ViatorParameters::sustainID)->load();
+    auto release = _treeState.getRawParameterValue(ViatorParameters::releaseID)->load();
+    auto osc1Volume = _treeState.getRawParameterValue(ViatorParameters::osc1GainID)->load();
+    
+    for (int i = 0; i < _frankenFreak.getNumVoices(); i++)
+    {
+        if (auto voice = dynamic_cast<FrankenSynthVoice*>(_frankenFreak.getVoice(i)))
+        {
+            
+            voice->setADSRParams(attack, decay, sustain, release);
+            voice->setOscParams(osc1Volume);
+        }
+    }
+}
+
 //==============================================================================
 void ViatorfrankenfreakAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     _frankenFreak.setCurrentPlaybackSampleRate(sampleRate);
+    
+    for (int i = 0; i < _frankenFreak.getNumVoices(); i++)
+    {
+        if (auto voice = dynamic_cast<FrankenSynthVoice*>(_frankenFreak.getVoice(i)))
+        {
+            voice->prepareToPlay(sampleRate, sampleRate, getTotalNumOutputChannels());
+        }
+    }
+    
+    updateParameters();
 }
 
 void ViatorfrankenfreakAudioProcessor::releaseResources()
@@ -120,14 +256,6 @@ bool ViatorfrankenfreakAudioProcessor::isBusesLayoutSupported (const BusesLayout
 void ViatorfrankenfreakAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     
-    for (int i = 0; i < _frankenFreak.getNumVoices(); i++)
-    {
-        if (auto voice = dynamic_cast<juce::SynthesiserVoice*>(_frankenFreak.getVoice(i)))
-        {
-            
-        }
-    }
-    
     _frankenFreak.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
 
@@ -139,7 +267,8 @@ bool ViatorfrankenfreakAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* ViatorfrankenfreakAudioProcessor::createEditor()
 {
-    return new ViatorfrankenfreakAudioProcessorEditor (*this);
+    //return new ViatorfrankenfreakAudioProcessorEditor (*this);
+    return new juce::GenericAudioProcessorEditor (*this);
 }
 
 //==============================================================================

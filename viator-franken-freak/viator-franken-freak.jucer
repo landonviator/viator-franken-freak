@@ -5,6 +5,12 @@
               companyName="Viator DSP" pluginCharacteristicsValue="pluginIsSynth,pluginProducesMidiOut,pluginWantsMidiIn">
   <MAINGROUP id="ySsc80" name="viator-franken-freak">
     <GROUP id="{6B80B03E-AE37-F89B-842D-686C3E1485F6}" name="Source">
+      <GROUP id="{A907B5B5-B280-2170-4584-E5F3AEAD3309}" name="globals">
+        <FILE id="VG4sGF" name="Globals.cpp" compile="1" resource="0" file="Source/globals/Globals.cpp"/>
+        <FILE id="YDmguG" name="Globals.h" compile="0" resource="0" file="Source/globals/Globals.h"/>
+        <FILE id="d7YW1C" name="Parameters.cpp" compile="1" resource="0" file="Source/globals/Parameters.cpp"/>
+        <FILE id="e1sgRI" name="Parameters.h" compile="0" resource="0" file="Source/globals/Parameters.h"/>
+      </GROUP>
       <GROUP id="{F661DC32-FB56-1D72-2856-84035F7AE93F}" name="DSP">
         <FILE id="GRaU0A" name="SynthSound.h" compile="0" resource="0" file="Source/DSP/SynthSound.h"/>
         <FILE id="IlQLkF" name="SynthVoice.cpp" compile="1" resource="0" file="Source/DSP/SynthVoice.cpp"/>
