@@ -51,4 +51,5 @@ private:
     float softCoeffA       {1.5};
     float softCoeffB       {-0.5};
     void applyTimbre(juce::dsp::AudioBlock<float>& block);
+    viator_dsp::SVFilter<float> _timbreFilter;
 };

@@ -13,7 +13,7 @@ void ViatorParameters::Params::initSliderParams()
     using skew = SliderParameterData::SkewType;
     using type = SliderParameterData::NumericType;
     
-    _sliderParams.push_back({ViatorParameters::osc1TimbreID, ViatorParameters::osc1TimbreName, 1.0f, 10.0f, 3.0f, skew::kSkew, 3.0, type::kFloat});
+    _sliderParams.push_back({ViatorParameters::osc1TimbreID, ViatorParameters::osc1TimbreName, 0.0f, 10.0f, 5.0f, skew::kNoSkew, 0.0, type::kFloat});
     _sliderParams.push_back({ViatorParameters::osc1TuneID, ViatorParameters::osc1TuneName, -24.0f, 24.0f, 0.0f, skew::kNoSkew, 0.0, type::kInt});
     _sliderParams.push_back({ViatorParameters::osc1GainID, ViatorParameters::osc1GainName, -30.0f, 30.0f, -3.0f, skew::kNoSkew, 0.0, type::kFloat});
     _sliderParams.push_back({ViatorParameters::attackID, ViatorParameters::attackName, 0.0f, 1.0f, 1.0f, skew::kNoSkew, 0.0, type::kFloat});

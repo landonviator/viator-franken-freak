@@ -13,6 +13,7 @@ bool FrankenSynthVoice::canPlaySound (juce::SynthesiserSound *sound)
 void FrankenSynthVoice::startNote (int midiNoteNumber, float velocity, juce::SynthesiserSound *sound, int currentPitchWheelPosition)
 {
     _osc1.setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber + tune));
+    _timbreFilter.setParameter(viator_dsp::SVFilter<float>::ParameterId::kCutoff, _osc1.getFrequency());
     _adsr.noteOn();
 }
 
@@ -86,7 +87,12 @@ void FrankenSynthVoice::setOscTune(int newTuneInterval)
 
 void FrankenSynthVoice::setOscTimbre(float newTimbre)
 {
-    timbre = newTimbre;
+    timbre = newTimbre - 2.0;
+    
+    if (timbre < 1.0)
+    {
+        timbre = 1.0;
+    }
     
     // compensate the volume drop between 1 and 3 by double
     if (timbre < 3.0)
@@ -114,6 +120,10 @@ void FrankenSynthVoice::prepareToPlay(double samplerate, int samplesPerBlock, in
     
     _osc1Gain.prepare(_spec);
     _osc1Gain.setRampDurationSeconds(0.01);
+    
+    _timbreFilter.prepare(_spec);
+    _timbreFilter.setParameter(viator_dsp::SVFilter<float>::ParameterId::kType, viator_dsp::SVFilter<float>::FilterType::kBandShelf);
+    _timbreFilter.setParameter(viator_dsp::SVFilter<float>::ParameterId::kQ, 0.3);
     
     _adsr.setSampleRate(samplerate);
 }
@@ -161,6 +171,11 @@ void FrankenSynthVoice::applyTimbre(juce::dsp::AudioBlock<float> &block)
             if (_oscType == OscType::kSin)
             {
                 data[sample] = (std::tanh(-timbre * x + x) - std::tanh(pow(x, 3.0f))) * timbreCompensate;
+            }
+            
+            else
+            {
+                data[sample] = x;
             }
         }
     }
