@@ -12,9 +12,9 @@ bool FrankenSynthVoice::canPlaySound (juce::SynthesiserSound *sound)
 
 void FrankenSynthVoice::startNote (int midiNoteNumber, float velocity, juce::SynthesiserSound *sound, int currentPitchWheelPosition)
 {
-    _osc1.setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber + tune));
-    _carrierOsc.setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber + tune));
-    _timbreFilter.setParameter(viator_dsp::SVFilter<float>::ParameterId::kCutoff, _osc1.getFrequency() * 2.0);
+    _mainOsc.setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber + tune));
+    _auxOsc.setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber + tune));
+    _timbreFilter.setParameter(viator_dsp::SVFilter<float>::ParameterId::kCutoff, _mainOsc.getFrequency() * 2.0);
     _adsr.noteOn();
 }
 
@@ -55,22 +55,22 @@ void FrankenSynthVoice::setOscType(OscType newOscType)
     {
         case OscType::kSin:
         {
-            _osc1.reset();
-            _osc1.initialise([this](float x){return std::sin(x);});
+            _mainOsc.reset();
+            _mainOsc.initialise([this](float x){return std::sin(x);});
             break;
         }
             
         case OscType::kSquare:
         {
-            _osc1.reset();
-            _osc1.initialise([this](float x){return x >= 0 ? 1.0 * waveCompensate : -1.0 * waveCompensate;});
+            _mainOsc.reset();
+            _mainOsc.initialise([this](float x){return x >= 0 ? 1.0 * waveCompensate : -1.0 * waveCompensate;});
             break;
         }
             
         case OscType::kSaw:
         {
-            _osc1.reset();
-            _osc1.initialise([this](float x){return juce::jmap(static_cast<float>(x), -juce::MathConstants<float>::pi, juce::MathConstants<float>::pi, -1.0f * waveCompensate, 1.0f * waveCompensate);});
+            _mainOsc.reset();
+            _mainOsc.initialise([this](float x){return juce::jmap(static_cast<float>(x), -juce::MathConstants<float>::pi, juce::MathConstants<float>::pi, -1.0f * waveCompensate, 1.0f * waveCompensate);});
             break;
         }
     }
@@ -88,6 +88,7 @@ void FrankenSynthVoice::setOscTune(int newTuneInterval)
 
 void FrankenSynthVoice::setOscTimbre(float newTimbre)
 {
+    // put timbre in the sweet spot for sin wave
     timbre = newTimbre - 2.0;
     
     if (timbre < 1.0)
@@ -106,12 +107,13 @@ void FrankenSynthVoice::setOscTimbre(float newTimbre)
         timbreCompensate = 0.55;
     }
     
+    // convert timbre to high shelf gain with compensation
     auto timbreGain = juce::jmap(newTimbre, 0.0f, 10.0f, -15.0f, 15.0f);
     _timbreFilter.setParameter(viator_dsp::SVFilter<float>::ParameterId::kGain, timbreGain);
     
     if (timbreGain > 0.0)
     {
-        _osc1CompensateGain.setGainDecibels(-timbreGain);
+        _mainOscCompensation.setGainDecibels(-timbreGain);
     }
 }
 
@@ -121,17 +123,17 @@ void FrankenSynthVoice::prepareToPlay(double samplerate, int samplesPerBlock, in
     _spec.maximumBlockSize = samplesPerBlock;
     _spec.numChannels = numOutputChannels;
     
-    _osc1.prepare(_spec);
-    _osc1.reset();
+    _mainOsc.prepare(_spec);
+    _mainOsc.reset();
     
-    _carrierOsc.prepare(_spec);
-    _carrierOsc.reset();
+    _auxOsc.prepare(_spec);
+    _auxOsc.reset();
     
-    _osc1Gain.prepare(_spec);
-    _osc1Gain.setRampDurationSeconds(0.01);
-    _osc1CompensateGain.prepare(_spec);
-    _osc1CompensateGain.setRampDurationSeconds(0.01);
-    _osc1CompensateGain.setGainDecibels(0.0);
+    _mainOscGain.prepare(_spec);
+    _mainOscGain.setRampDurationSeconds(0.01);
+    _mainOscCompensation.prepare(_spec);
+    _mainOscCompensation.setRampDurationSeconds(0.01);
+    _mainOscCompensation.setGainDecibels(0.0);
     
     _timbreFilter.prepare(_spec);
     _timbreFilter.setParameter(viator_dsp::SVFilter<float>::ParameterId::kType, viator_dsp::SVFilter<float>::FilterType::kHighShelf);
@@ -149,10 +151,12 @@ void FrankenSynthVoice::renderNextBlock (juce::AudioBuffer<float> &outputBuffer,
     _synthBuffer.clear();
     
     juce::dsp::AudioBlock<float> block {_synthBuffer};
-    _osc1Gain.setGainDecibels(gain);
+    _mainOscGain.setGainDecibels(gain);
     
-    _osc1.process(juce::dsp::ProcessContextReplacing<float>(block));
+    _mainOsc.process(juce::dsp::ProcessContextReplacing<float>(block));
     
+    // sin uses clipper for timbre
+    // others use filter for timbre
     if (_oscType == OscType::kSin)
     {
         applyTimbre(block);
@@ -161,10 +165,10 @@ void FrankenSynthVoice::renderNextBlock (juce::AudioBuffer<float> &outputBuffer,
     else
     {
         _timbreFilter.process(juce::dsp::ProcessContextReplacing<float>(block));
-        _osc1CompensateGain.process(juce::dsp::ProcessContextReplacing<float>(block));
+        _mainOscCompensation.process(juce::dsp::ProcessContextReplacing<float>(block));
     }
     
-    _osc1Gain.process(juce::dsp::ProcessContextReplacing<float>(block));
+    _mainOscGain.process(juce::dsp::ProcessContextReplacing<float>(block));
     
     _adsr.applyEnvelopeToBuffer(_synthBuffer, 0, _synthBuffer.getNumSamples());
     

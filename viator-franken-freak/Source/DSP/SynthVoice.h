@@ -32,10 +32,10 @@ public:
     
 private:
     juce::dsp::ProcessSpec _spec;
-    juce::dsp::Oscillator<float> _osc1 {[this](float x){return std::sin(x);}};
-    juce::dsp::Oscillator<float> _carrierOsc {[this](float x){return std::sin(x);}};
-    juce::dsp::Gain<float> _osc1Gain;
-    juce::dsp::Gain<float> _osc1CompensateGain;
+    juce::dsp::Oscillator<float> _mainOsc {[this](float x){return std::sin(x);}};
+    juce::dsp::Oscillator<float> _auxOsc {[this](float x){return std::sin(x);}};
+    juce::dsp::Gain<float> _mainOscGain;
+    juce::dsp::Gain<float> _mainOscCompensation;
     juce::ADSR _adsr;
     juce::ADSR::Parameters _adsrParams;
     juce::AudioBuffer<float> _synthBuffer;
