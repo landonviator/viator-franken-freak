@@ -12,7 +12,7 @@ bool FrankenSynthVoice::canPlaySound (juce::SynthesiserSound *sound)
 
 void FrankenSynthVoice::startNote (int midiNoteNumber, float velocity, juce::SynthesiserSound *sound, int currentPitchWheelPosition)
 {
-    _osc1.setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber));
+    _osc1.setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber + tune));
     _adsr.noteOn();
 }
 
@@ -81,6 +81,11 @@ void FrankenSynthVoice::setOscParams(float osc1Volume)
 {
     gain = osc1Volume;
     _osc1Gain.setGainDecibels(gain);
+}
+
+void FrankenSynthVoice::setOscTune(int newTuneInterval)
+{
+    tune = newTuneInterval;
 }
 
 void FrankenSynthVoice::prepareToPlay(double samplerate, int samplesPerBlock, int numOutputChannels)

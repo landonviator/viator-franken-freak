@@ -17,6 +17,7 @@ public:
     
     void setADSRParams(float attack, float decay, float sustain, float release);
     void setOscParams(float osc1Volume);
+    void setOscTune(int newTuneInterval);
     
     enum class OscType
     {
@@ -40,4 +41,5 @@ private:
     static constexpr float _piInv = 1.0 / juce::MathConstants<float>::pi;
     
     float gain = 0.0;
+    int tune = 0;
 };

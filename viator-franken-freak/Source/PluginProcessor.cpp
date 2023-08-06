@@ -192,7 +192,9 @@ void ViatorfrankenfreakAudioProcessor::updateParameters()
     auto decay = _treeState.getRawParameterValue(ViatorParameters::decayID)->load();
     auto sustain = _treeState.getRawParameterValue(ViatorParameters::sustainID)->load();
     auto release = _treeState.getRawParameterValue(ViatorParameters::releaseID)->load();
+    
     auto osc1Volume = _treeState.getRawParameterValue(ViatorParameters::osc1GainID)->load();
+    auto osc1Tune = _treeState.getRawParameterValue(ViatorParameters::osc1TuneID)->load();
     
     for (int i = 0; i < _frankenFreak.getNumVoices(); i++)
     {
@@ -201,6 +203,7 @@ void ViatorfrankenfreakAudioProcessor::updateParameters()
             
             voice->setADSRParams(attack, decay, sustain, release);
             voice->setOscParams(osc1Volume);
+            voice->setOscTune(osc1Tune);
         }
     }
 }
