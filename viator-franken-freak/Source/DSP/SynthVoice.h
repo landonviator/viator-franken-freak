@@ -35,6 +35,7 @@ private:
     juce::dsp::Oscillator<float> _osc1 {[this](float x){return std::sin(x);}};
     juce::dsp::Oscillator<float> _carrierOsc {[this](float x){return std::sin(x);}};
     juce::dsp::Gain<float> _osc1Gain;
+    juce::dsp::Gain<float> _osc1CompensateGain;
     juce::ADSR _adsr;
     juce::ADSR::Parameters _adsrParams;
     juce::AudioBuffer<float> _synthBuffer;
@@ -43,6 +44,7 @@ private:
     static constexpr float _piInv = 1.0 / juce::MathConstants<float>::pi;
     
     float gain             {0.0};
+    float gainCompensate   {0.0};
     int   tune             {0};
     
     float timbre           {1.0};

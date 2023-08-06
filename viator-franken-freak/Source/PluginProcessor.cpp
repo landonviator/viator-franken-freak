@@ -178,10 +178,7 @@ void ViatorfrankenfreakAudioProcessor::parameterChanged(const juce::String &para
         }
     }
     
-    else
-    {
-        updateParameters();
-    }
+    updateParameters();
     
 }
 
