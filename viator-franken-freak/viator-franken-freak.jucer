@@ -5,6 +5,60 @@
               companyName="Viator DSP" pluginCharacteristicsValue="pluginIsSynth,pluginProducesMidiOut,pluginWantsMidiIn">
   <MAINGROUP id="ySsc80" name="viator-franken-freak">
     <GROUP id="{6B80B03E-AE37-F89B-842D-686C3E1485F6}" name="Source">
+      <GROUP id="{58C4EA99-D4E0-7EC6-77C6-A1901A033B0F}" name="assets">
+        <GROUP id="{93ABE29E-EEE9-E17C-4AD9-B184395F8C87}" name="decor">
+          <FILE id="iU5FAx" name="decor_grid.png" compile="0" resource="1" file="Source/assets/decor/decor_grid.png"/>
+          <FILE id="BB5V1B" name="screw.png" compile="0" resource="1" file="Source/assets/decor/screw.png"/>
+        </GROUP>
+        <GROUP id="{5949E207-C91A-ADA8-7116-3BDBF9679363}" name="faders">
+          <FILE id="WNSbDq" name="Ver_flat_slider.png" compile="0" resource="1"
+                file="Source/assets/faders/Ver_flat_slider.png"/>
+          <FILE id="XGaIfG" name="Ver_slider.png" compile="0" resource="1" file="Source/assets/faders/Ver_slider.png"/>
+        </GROUP>
+        <GROUP id="{8CC2BB4B-1353-8E94-A5EA-B2D22E27EF4C}" name="knobs">
+          <FILE id="vsq3Pl" name="Knob_01.png" compile="0" resource="1" file="Source/assets/knobs/Knob_01.png"/>
+          <FILE id="pXilqB" name="Knob_02.png" compile="0" resource="1" file="Source/assets/knobs/Knob_02.png"/>
+          <FILE id="iHbNv0" name="Knob_03.png" compile="0" resource="1" file="Source/assets/knobs/Knob_03.png"/>
+          <FILE id="rffkaI" name="Knob_04.png" compile="0" resource="1" file="Source/assets/knobs/Knob_04.png"/>
+          <FILE id="esgB9g" name="Knob_05.png" compile="0" resource="1" file="Source/assets/knobs/Knob_05.png"/>
+          <FILE id="PHmgvP" name="Knob_06.png" compile="0" resource="1" file="Source/assets/knobs/Knob_06.png"/>
+          <FILE id="O6UA21" name="Knob_07.png" compile="0" resource="1" file="Source/assets/knobs/Knob_07.png"/>
+          <FILE id="uVNQCN" name="Knob_08.png" compile="0" resource="1" file="Source/assets/knobs/Knob_08.png"/>
+          <FILE id="HIuHNy" name="Knob_09.png" compile="0" resource="1" file="Source/assets/knobs/Knob_09.png"/>
+          <FILE id="m84UeG" name="Knob_10.png" compile="0" resource="1" file="Source/assets/knobs/Knob_10.png"/>
+          <FILE id="Cdf2XY" name="Knob_mid.png" compile="0" resource="1" file="Source/assets/knobs/Knob_mid.png"/>
+        </GROUP>
+        <GROUP id="{6EEC74F2-3D46-9712-6C39-95F32C7D3A60}" name="vu-meter">
+          <GROUP id="{C22DC67A-D3E0-203C-3B15-91146FFC31A6}" name="vintage">
+            <FILE id="KEuYZY" name="VU_meter_back.png" compile="0" resource="1"
+                  file="Source/assets/vu-meter/vintage/VU_meter_back.png"/>
+          </GROUP>
+          <FILE id="m6To44" name="back_vu-meter_decore5.png" compile="0" resource="1"
+                file="Source/assets/vu-meter/back_vu-meter_decore5.png"/>
+          <FILE id="YHi4cI" name="scale_vu-meter.png" compile="0" resource="1"
+                file="Source/assets/vu-meter/scale_vu-meter.png"/>
+          <FILE id="a6THaF" name="scale_vu-meterno_name.png" compile="0" resource="1"
+                file="Source/assets/vu-meter/scale_vu-meterno_name.png"/>
+          <FILE id="jKvsMe" name="vu_meter.png" compile="0" resource="1" file="Source/assets/vu-meter/vu_meter.png"/>
+        </GROUP>
+        <FILE id="bg2wew" name="back_a.png" compile="0" resource="1" file="Source/assets/back_a.png"/>
+        <FILE id="m3txZD" name="back_d.png" compile="0" resource="1" file="Source/assets/back_d.png"/>
+        <FILE id="tP05ui" name="but_small_rec_off.png" compile="0" resource="1"
+              file="Source/assets/but_small_rec_off.png"/>
+        <FILE id="s0Og2J" name="but_small_rec_on.png" compile="0" resource="1"
+              file="Source/assets/but_small_rec_on.png"/>
+        <FILE id="syBHIB" name="landon.png" compile="0" resource="1" file="Source/assets/landon.png"/>
+        <FILE id="hWXrv3" name="LED_meter.png" compile="0" resource="1" file="Source/assets/LED_meter.png"/>
+        <FILE id="WadGwj" name="led_off.png" compile="0" resource="1" file="Source/assets/led_off.png"/>
+        <FILE id="szeDSG" name="led_on.png" compile="0" resource="1" file="Source/assets/led_on.png"/>
+        <FILE id="GmIa9u" name="pad_off.png" compile="0" resource="1" file="Source/assets/pad_off.png"/>
+        <FILE id="x8toPk" name="pad_on.png" compile="0" resource="1" file="Source/assets/pad_on.png"/>
+        <FILE id="TeyRI0" name="screen.png" compile="0" resource="1" file="Source/assets/screen.png"/>
+      </GROUP>
+      <GROUP id="{3937BF08-7B05-6018-594B-650FD2798EBF}" name="components">
+        <FILE id="JP6TOB" name="Header.cpp" compile="1" resource="0" file="Source/components/Header.cpp"/>
+        <FILE id="Ddnuxx" name="Header.h" compile="0" resource="0" file="Source/components/Header.h"/>
+      </GROUP>
       <GROUP id="{A907B5B5-B280-2170-4584-E5F3AEAD3309}" name="globals">
         <FILE id="VG4sGF" name="Globals.cpp" compile="1" resource="0" file="Source/globals/Globals.cpp"/>
         <FILE id="YDmguG" name="Globals.h" compile="0" resource="0" file="Source/globals/Globals.h"/>

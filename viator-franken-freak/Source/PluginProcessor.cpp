@@ -273,8 +273,8 @@ bool ViatorfrankenfreakAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* ViatorfrankenfreakAudioProcessor::createEditor()
 {
-    //return new ViatorfrankenfreakAudioProcessorEditor (*this);
-    return new juce::GenericAudioProcessorEditor (*this);
+    return new ViatorfrankenfreakAudioProcessorEditor (*this);
+    //return new juce::GenericAudioProcessorEditor (*this);
 }
 
 //==============================================================================

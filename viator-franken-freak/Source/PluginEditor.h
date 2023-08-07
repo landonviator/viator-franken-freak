@@ -1,19 +1,9 @@
-/*
-  ==============================================================================
-
-    This file contains the basic framework code for a JUCE plugin editor.
-
-  ==============================================================================
-*/
-
 #pragma once
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "components/Header.h"
 
-//==============================================================================
-/**
-*/
 class ViatorfrankenfreakAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
 public:
@@ -28,6 +18,20 @@ private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     ViatorfrankenfreakAudioProcessor& audioProcessor;
+    
+    // header
+    Header _headerComp;
+    
+    // placement rects
+    juce::Rectangle<int> _osc1Area;
+    juce::Rectangle<int> _osc2Area;
+    juce::Rectangle<int> _effectsArea;
+    juce::Rectangle<int> _arpArea;
+    juce::Rectangle<int> _adsrArea;
+    juce::Rectangle<int> _modArea;
+    juce::Rectangle<int> _filterArea;
+    
+    juce::Colour _offWhite = juce::Colours::whitesmoke.withAlpha(0.5f);
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ViatorfrankenfreakAudioProcessorEditor)
 };

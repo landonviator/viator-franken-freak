@@ -1,21 +1,14 @@
-/*
-  ==============================================================================
-
-    This file contains the basic framework code for a JUCE plugin editor.
-
-  ==============================================================================
-*/
-
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-//==============================================================================
 ViatorfrankenfreakAudioProcessorEditor::ViatorfrankenfreakAudioProcessorEditor (ViatorfrankenfreakAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    setSize (400, 300);
+    // header
+    addAndMakeVisible(_headerComp);
+    
+    // window
+    viator_utils::PluginWindow::setPluginWindowSize(0, 0, *this, 1.5, 1.0);
 }
 
 ViatorfrankenfreakAudioProcessorEditor::~ViatorfrankenfreakAudioProcessorEditor()
@@ -25,16 +18,65 @@ ViatorfrankenfreakAudioProcessorEditor::~ViatorfrankenfreakAudioProcessorEditor(
 //==============================================================================
 void ViatorfrankenfreakAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-
-    g.setColour (juce::Colours::white);
-    g.setFont (15.0f);
-    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
+    // bg color
+    g.fillAll (juce::Colours::black);
+    
+    // image bg
+    auto bgImage = juce::ImageCache::getFromMemory(BinaryData::back_a_png, BinaryData::back_a_pngSize);
+    auto bgWidth = getWidth() * 0.9;
+    auto bgHeight = getHeight() * 0.82;
+    auto bgY = getHeight() * 0.13;
+    g.drawImage(bgImage, getLocalBounds().toFloat().withSizeKeepingCentre(bgWidth, bgHeight).withY(bgY));
+    
+    g.setColour(_offWhite);
+    g.drawRect(_osc1Area);
+    g.drawRect(_osc2Area);
+    g.drawRect(_effectsArea);
+    g.drawRect(_arpArea);
+    g.drawRect(_adsrArea);
+    g.drawRect(_modArea);
+    g.drawRect(_filterArea);
 }
 
 void ViatorfrankenfreakAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    // header
+    const auto headerHeightMult = 0.1;
+    const auto headerHeight = getHeight() * headerHeightMult;
+    _headerComp.setBounds(0, 0, getWidth(), headerHeight);
+    
+    // osc 1
+    const auto osc1AreaX = getWidth() * 0.1;
+    const auto osc1AreaY = getHeight() * 0.16;
+    const auto osc1AreaWidth = getWidth() * 0.25;
+    const auto osc1AreaHeight = getHeight() * 0.2;
+    _osc1Area.setBounds(osc1AreaX, osc1AreaY, osc1AreaWidth, osc1AreaHeight);
+    
+    // osc 2
+    const auto osc2YMult = 0.125;
+    const auto osc2AreaY = _osc1Area.getBottom() + osc1AreaHeight * osc2YMult;
+    _osc2Area.setBounds(osc1AreaX, osc2AreaY, osc1AreaWidth, osc1AreaHeight);
+    
+    // fx
+    const auto effectsY = _osc2Area.getBottom() + osc1AreaHeight * osc2YMult;
+    const auto effectsWidthMult = 1.57;
+    const auto effectsHeightMult = 1.6;
+    _effectsArea.setBounds(osc1AreaX, effectsY, osc1AreaWidth * effectsWidthMult, osc1AreaHeight * effectsHeightMult);
+    
+    // arp
+    const auto arpXMult = 0.05;
+    const auto arpX = _effectsArea.getRight() + _effectsArea.getWidth() * arpXMult;
+    _arpArea.setBounds(arpX, effectsY, _effectsArea.getWidth(), osc1AreaHeight * effectsHeightMult);
+    
+    // adsr
+    const auto adsrWidthMult = 0.075;
+    const auto adsrHeightMult = 2.12;
+    const auto adsrX = _osc1Area.getRight() + _osc1Area.getWidth() * adsrWidthMult;
+    _adsrArea.setBounds(adsrX, osc1AreaY, osc1AreaWidth, osc1AreaHeight * adsrHeightMult);
+    
+    // mod
+    const auto modX = _adsrArea.getRight() + _osc1Area.getWidth() * adsrWidthMult;
+    const auto filterWidthMult = 1.06;
+    _modArea.setBounds(modX, osc1AreaY, osc1AreaWidth * filterWidthMult, osc1AreaHeight);
+    _filterArea.setBounds(modX, osc2AreaY, osc1AreaWidth * filterWidthMult, osc1AreaHeight);
 }
