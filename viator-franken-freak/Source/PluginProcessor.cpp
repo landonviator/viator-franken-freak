@@ -164,16 +164,16 @@ void ViatorfrankenfreakAudioProcessor::parameterChanged(const juce::String &para
     if (_frankenFreak.getSampleRate() < 44100.0f)
         return;
     
-    if (parameterID == ViatorParameters::osc1ChoiceID)
+    if (parameterID == ViatorParameters::osc1ChoiceID || parameterID == ViatorParameters::osc2ChoiceID)
     {
         auto oscType = static_cast<FrankenSynthVoice::OscType>(_treeState.getRawParameterValue(ViatorParameters::osc1ChoiceID)->load());
+        auto osc2Type = static_cast<FrankenSynthVoice::OscType>(_treeState.getRawParameterValue(ViatorParameters::osc2ChoiceID)->load());
         
         for (int i = 0; i < _frankenFreak.getNumVoices(); i++)
         {
             if (auto voice = dynamic_cast<FrankenSynthVoice*>(_frankenFreak.getVoice(i)))
             {
-                
-                voice->setOscType(oscType);
+                voice->setOscType(oscType, osc2Type);
             }
         }
     }
@@ -193,15 +193,20 @@ void ViatorfrankenfreakAudioProcessor::updateParameters()
     auto osc1Tune = _treeState.getRawParameterValue(ViatorParameters::osc1TuneID)->load();
     auto osc1Timbre = _treeState.getRawParameterValue(ViatorParameters::osc1TimbreID)->load();
     
+    auto osc2Volume = _treeState.getRawParameterValue(ViatorParameters::osc2GainID)->load();
+    auto osc2Tune = _treeState.getRawParameterValue(ViatorParameters::osc2TuneID)->load();
+    auto osc2Timbre = _treeState.getRawParameterValue(ViatorParameters::osc2TimbreID)->load();
+    
     for (int i = 0; i < _frankenFreak.getNumVoices(); i++)
     {
         if (auto voice = dynamic_cast<FrankenSynthVoice*>(_frankenFreak.getVoice(i)))
         {
-            
             voice->setADSRParams(attack, decay, sustain, release);
-            voice->setOscParams(osc1Volume);
-            voice->setOscTune(osc1Tune);
-            voice->setOscTimbre(osc1Timbre);
+            
+            // osc 1
+            voice->setOscParams(osc1Volume, osc2Volume);
+            voice->setOscTune(osc1Tune, osc2Tune);
+            voice->setOscTimbre(osc1Timbre, osc2Timbre);
         }
     }
 }

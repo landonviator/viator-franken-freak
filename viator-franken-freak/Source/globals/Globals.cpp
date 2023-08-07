@@ -12,6 +12,15 @@ extern const juce::String osc1TimbreName = "osc1TimbreName";
 extern const juce::String osc1GainID = "osc1GainID";
 extern const juce::String osc1GainName = "osc1GainName";
 
+extern const juce::String osc2TuneID = "osc2TuneID";
+extern const juce::String osc2TuneName = "osc2TuneName";
+
+extern const juce::String osc2TimbreID = "osc2TimbreID";
+extern const juce::String osc2TimbreName = "osc2TimbreName";
+
+extern const juce::String osc2GainID = "osc2GainID";
+extern const juce::String osc2GainName = "osc2GainName";
+
 extern const juce::String attackID = "attackID";
 extern const juce::String attackName = "attackName";
 
@@ -26,4 +35,7 @@ extern const juce::String releaseName = "releaseName";
 
 extern const juce::String osc1ChoiceID = "osc1ChoiceID";
 extern const juce::String osc1ChoiceName = "osc1ChoiceName";
+
+extern const juce::String osc2ChoiceID = "osc2ChoiceID";
+extern const juce::String osc2ChoiceName = "osc2ChoiceName";
 }
