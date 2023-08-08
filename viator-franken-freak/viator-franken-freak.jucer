@@ -56,6 +56,34 @@
         <FILE id="TeyRI0" name="screen.png" compile="0" resource="1" file="Source/assets/screen.png"/>
       </GROUP>
       <GROUP id="{3937BF08-7B05-6018-594B-650FD2798EBF}" name="components">
+        <GROUP id="{A9BDF0C7-3FE2-C0CA-C586-E3FF461CEC50}" name="ADSRComp">
+          <FILE id="qkV6WA" name="ADSRComp.cpp" compile="1" resource="0" file="Source/components/ADSRComp/ADSRComp.cpp"/>
+          <FILE id="WgnxaS" name="ADSRComp.h" compile="0" resource="0" file="Source/components/ADSRComp/ADSRComp.h"/>
+        </GROUP>
+        <GROUP id="{258E0EDC-55C4-B161-BC82-2C1469FC9254}" name="ArpComp">
+          <FILE id="M7Ae3Y" name="ArpComp.cpp" compile="1" resource="0" file="Source/components/ArpComp/ArpComp.cpp"/>
+          <FILE id="FwHadg" name="ArpComp.h" compile="0" resource="0" file="Source/components/ArpComp/ArpComp.h"/>
+        </GROUP>
+        <GROUP id="{01B51746-A071-61BA-B37B-C520368BE183}" name="FXComp">
+          <FILE id="eU4lDF" name="FXComp.cpp" compile="1" resource="0" file="Source/components/FXComp/FXComp.cpp"/>
+          <FILE id="euy856" name="FXComp.h" compile="0" resource="0" file="Source/components/FXComp/FXComp.h"/>
+        </GROUP>
+        <GROUP id="{B5985652-72C7-CD72-C41A-8D5654E22F8C}" name="ModComp">
+          <FILE id="m961JU" name="ModComp.cpp" compile="1" resource="0" file="Source/components/ModComp/ModComp.cpp"/>
+          <FILE id="qYAhoI" name="ModComp.h" compile="0" resource="0" file="Source/components/ModComp/ModComp.h"/>
+        </GROUP>
+        <GROUP id="{FBC1C118-A878-8C6E-E384-D3B94D5E913D}" name="Osc1Comp">
+          <FILE id="dsLL4m" name="Osc1Comp.cpp" compile="1" resource="0" file="Source/components/Osc1Comp/Osc1Comp.cpp"/>
+          <FILE id="COOtgl" name="Osc1Comp.h" compile="0" resource="0" file="Source/components/Osc1Comp/Osc1Comp.h"/>
+        </GROUP>
+        <GROUP id="{CB1DA93B-454E-E47C-5459-B4B82EF1DDF9}" name="Osc2Comp">
+          <FILE id="KfVJOL" name="Osc2Comp.cpp" compile="1" resource="0" file="Source/components/Osc2Comp/Osc2Comp.cpp"/>
+          <FILE id="aVozYl" name="Osc2Comp.h" compile="0" resource="0" file="Source/components/Osc2Comp/Osc2Comp.h"/>
+        </GROUP>
+        <GROUP id="{A5348AB3-AD23-3B58-FBAC-2F24EB4FBFE9}" name="OutputComp">
+          <FILE id="AZbU9N" name="OutputComp.cpp" compile="1" resource="0" file="Source/components/OutputComp/OutputComp.cpp"/>
+          <FILE id="T9Tfe6" name="OutputComp.h" compile="0" resource="0" file="Source/components/OutputComp/OutputComp.h"/>
+        </GROUP>
         <FILE id="JP6TOB" name="Header.cpp" compile="1" resource="0" file="Source/components/Header.cpp"/>
         <FILE id="Ddnuxx" name="Header.h" compile="0" resource="0" file="Source/components/Header.h"/>
       </GROUP>

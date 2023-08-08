@@ -203,7 +203,6 @@ void ViatorfrankenfreakAudioProcessor::updateParameters()
         {
             voice->setADSRParams(attack, decay, sustain, release);
             
-            // osc 1
             voice->setOscParams(osc1Volume, osc2Volume);
             voice->setOscTune(osc1Tune, osc2Tune);
             voice->setOscTimbre(osc1Timbre, osc2Timbre);
