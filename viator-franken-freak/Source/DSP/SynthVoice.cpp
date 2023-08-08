@@ -58,7 +58,7 @@ void FrankenSynthVoice::setOscType(OscType newOscType, OscType newOsc2Type)
         case OscType::kSin:
         {
             _mainOsc.reset();
-            _mainOsc.initialise([this](float x){return std::sin(x) * 0.5;});
+            _mainOsc.initialise([this](float x){return std::sin(x) * 0.4;});
             break;
         }
             
@@ -82,7 +82,7 @@ void FrankenSynthVoice::setOscType(OscType newOscType, OscType newOsc2Type)
         case OscType::kSin:
         {
             _auxOsc.reset();
-            _auxOsc.initialise([this](float x){return std::sin(x) * 0.5;});
+            _auxOsc.initialise([this](float x){return std::sin(x) * 0.4;});
             break;
         }
             

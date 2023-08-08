@@ -3,6 +3,8 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "components/Header.h"
+#include "components/Osc1Comp/Osc1Comp.h"
+#include "components/Osc2Comp/Osc2Comp.h"
 
 class ViatorfrankenfreakAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
@@ -21,6 +23,12 @@ private:
     
     // header
     Header _headerComp;
+    
+    // osc 1
+    Osc1Comp _osc1Comp;
+    
+    // osc 2
+    Osc2Comp _osc2Comp;
     
     // placement rects
     juce::Rectangle<int> _osc1Area;

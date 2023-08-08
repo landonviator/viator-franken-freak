@@ -36,7 +36,7 @@ private:
     juce::ADSR::Parameters _adsrParams;
     
     // osc 1
-    juce::dsp::Oscillator<float> _mainOsc {[this](float x){return std::sin(x) * 0.5;}};
+    juce::dsp::Oscillator<float> _mainOsc {[this](float x){return std::sin(x) * 0.4;}};
     juce::dsp::Gain<float> _mainOscGain;
     juce::dsp::Gain<float> _mainOscCompensation;
     juce::AudioBuffer<float> _synthBuffer;
@@ -53,7 +53,7 @@ private:
     viator_dsp::SVFilter<float> _timbreFilter1;
     
     // osc 2
-    juce::dsp::Oscillator<float> _auxOsc {[this](float x){return std::sin(x) * 0.5;}};
+    juce::dsp::Oscillator<float> _auxOsc {[this](float x){return std::sin(x) * 0.4;}};
     juce::dsp::Gain<float> _auxOscGain;
     juce::dsp::Gain<float> _auxOscCompensation;
     juce::AudioBuffer<float> _synthBuffer2;

@@ -28,6 +28,10 @@
           <FILE id="m84UeG" name="Knob_10.png" compile="0" resource="1" file="Source/assets/knobs/Knob_10.png"/>
           <FILE id="Cdf2XY" name="Knob_mid.png" compile="0" resource="1" file="Source/assets/knobs/Knob_mid.png"/>
         </GROUP>
+        <GROUP id="{6CDA1C2F-9CF1-516E-0774-58C60F4D0D1C}" name="menus">
+          <FILE id="GbrACS" name="menu.png" compile="0" resource="1" file="Source/assets/menus/menu.png"/>
+          <FILE id="JfSd56" name="menu_open.png" compile="0" resource="1" file="Source/assets/menus/menu_open.png"/>
+        </GROUP>
         <GROUP id="{6EEC74F2-3D46-9712-6C39-95F32C7D3A60}" name="vu-meter">
           <GROUP id="{C22DC67A-D3E0-203C-3B15-91146FFC31A6}" name="vintage">
             <FILE id="KEuYZY" name="VU_meter_back.png" compile="0" resource="1"
@@ -47,6 +51,7 @@
               file="Source/assets/but_small_rec_off.png"/>
         <FILE id="s0Og2J" name="but_small_rec_on.png" compile="0" resource="1"
               file="Source/assets/but_small_rec_on.png"/>
+        <FILE id="W5MmDh" name="Knob_small.png" compile="0" resource="1" file="Source/assets/knobs/Knob_small.png"/>
         <FILE id="syBHIB" name="landon.png" compile="0" resource="1" file="Source/assets/landon.png"/>
         <FILE id="hWXrv3" name="LED_meter.png" compile="0" resource="1" file="Source/assets/LED_meter.png"/>
         <FILE id="WadGwj" name="led_off.png" compile="0" resource="1" file="Source/assets/led_off.png"/>
@@ -54,6 +59,9 @@
         <FILE id="GmIa9u" name="pad_off.png" compile="0" resource="1" file="Source/assets/pad_off.png"/>
         <FILE id="x8toPk" name="pad_on.png" compile="0" resource="1" file="Source/assets/pad_on.png"/>
         <FILE id="TeyRI0" name="screen.png" compile="0" resource="1" file="Source/assets/screen.png"/>
+        <FILE id="KmIeAj" name="slider_vertical.png" compile="0" resource="1"
+              file="Source/assets/knobs/slider_vertical.png"/>
+        <FILE id="ChMcZ2" name="text_box.png" compile="0" resource="1" file="Source/assets/menus/text_box.png"/>
       </GROUP>
       <GROUP id="{3937BF08-7B05-6018-594B-650FD2798EBF}" name="components">
         <GROUP id="{A9BDF0C7-3FE2-C0CA-C586-E3FF461CEC50}" name="ADSRComp">

@@ -3,9 +3,17 @@
 
 ViatorfrankenfreakAudioProcessorEditor::ViatorfrankenfreakAudioProcessorEditor (ViatorfrankenfreakAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
+, _osc1Comp(audioProcessor)
+, _osc2Comp(audioProcessor)
 {
     // header
     addAndMakeVisible(_headerComp);
+    
+    // osc 1
+    addAndMakeVisible(_osc1Comp);
+    
+    // osc 2
+    addAndMakeVisible(_osc2Comp);
     
     // window
     viator_utils::PluginWindow::setPluginWindowSize(0, 0, *this, 1.5, 1.0);
@@ -27,15 +35,6 @@ void ViatorfrankenfreakAudioProcessorEditor::paint (juce::Graphics& g)
     auto bgHeight = getHeight() * 0.82;
     auto bgY = getHeight() * 0.13;
     g.drawImage(bgImage, getLocalBounds().toFloat().withSizeKeepingCentre(bgWidth, bgHeight).withY(bgY));
-    
-    g.setColour(_offWhite);
-    g.drawRect(_osc1Area);
-    g.drawRect(_osc2Area);
-    g.drawRect(_effectsArea);
-    g.drawRect(_arpArea);
-    g.drawRect(_adsrArea);
-    g.drawRect(_modArea);
-    g.drawRect(_filterArea);
 }
 
 void ViatorfrankenfreakAudioProcessorEditor::resized()
@@ -51,11 +50,13 @@ void ViatorfrankenfreakAudioProcessorEditor::resized()
     const auto osc1AreaWidth = getWidth() * 0.25;
     const auto osc1AreaHeight = getHeight() * 0.2;
     _osc1Area.setBounds(osc1AreaX, osc1AreaY, osc1AreaWidth, osc1AreaHeight);
+    _osc1Comp.setBounds(osc1AreaX, osc1AreaY, osc1AreaWidth, osc1AreaHeight);
     
     // osc 2
     const auto osc2YMult = 0.125;
     const auto osc2AreaY = _osc1Area.getBottom() + osc1AreaHeight * osc2YMult;
     _osc2Area.setBounds(osc1AreaX, osc2AreaY, osc1AreaWidth, osc1AreaHeight);
+    _osc2Comp.setBounds(osc1AreaX, osc2AreaY, osc1AreaWidth, osc1AreaHeight);
     
     // fx
     const auto effectsY = _osc2Area.getBottom() + osc1AreaHeight * osc2YMult;

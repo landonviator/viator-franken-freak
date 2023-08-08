@@ -58,7 +58,7 @@ private:
     void parameterChanged (const juce::String& parameterID, float newValue) override;
     using Parameter = juce::AudioProcessorValueTreeState::Parameter;
     static juce::String valueToTextFunction(float x) { return juce::String(static_cast<int>(x)); }
-    static float textToValueFunction(const juce::String& str) { return str.getFloatValue(); }
+    static float textToValueFunction(const juce::String& str) { return static_cast<int>(str.getFloatValue()); }
     void updateParameters();
     
     const int _versionNumber = 1;
