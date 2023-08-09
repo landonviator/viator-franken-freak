@@ -1,22 +1,9 @@
-/*
-  ==============================================================================
-
-    ADSRComp.cpp
-    Created: 7 Aug 2023 9:10:52pm
-    Author:  Landon Viator
-
-  ==============================================================================
-*/
-
 #include <JuceHeader.h>
 #include "ADSRComp.h"
 
-//==============================================================================
-ADSRComp::ADSRComp()
+ADSRComp::ADSRComp(ViatorfrankenfreakAudioProcessor& p) : audioProcessor(p)
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
-
+    setSliderProps();
 }
 
 ADSRComp::~ADSRComp()
@@ -25,27 +12,36 @@ ADSRComp::~ADSRComp()
 
 void ADSRComp::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
-
-    g.setColour (juce::Colours::grey);
-    g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
-
-    g.setColour (juce::Colours::white);
-    g.setFont (14.0f);
-    g.drawText ("ADSRComp", getLocalBounds(),
-                juce::Justification::centred, true);   // draw some placeholder text
+    g.setColour(_offWhite);
+    g.drawRect(getLocalBounds());
 }
 
 void ADSRComp::resized()
 {
-    // This method is where you should set the bounds of any child
-    // components that your component contains..
+    auto sliderX = getWidth() * 0.1;
+    const auto sliderY = getHeight() * 0.05;
+    const auto sliderWidth = getWidth() * 0.2;
+    const auto sliderHeight = getHeight() * 0.9;
+    for (auto& slider : _adsrSliders)
+    {
+        slider->setBounds(sliderX, sliderY, sliderWidth, sliderHeight);
+        sliderX += sliderWidth;
+    }
+    
+}
 
+void ADSRComp::setSliderProps()
+{
+    auto params = audioProcessor._parameterMap.getADSRSliderParams();
+    auto image = juce::ImageCache::getFromMemory(BinaryData::slider_vertical_png, BinaryData::slider_vertical_pngSize);
+    
+    for (int i = 0; i < params.size(); ++i)
+    {
+        _adsrSliders.add(std::make_unique<viator_gui::ImageFader>());
+        _adsrSliders[i]->setFaderImageAndNumFrames(image, 129);
+        _adsrSliders[i]->setSliderStyle(juce::Slider::LinearVertical);
+        _adsrSliders[i]->setName(params[i].paramName);
+        addAndMakeVisible(*_adsrSliders[i]);
+        _attachments.add(std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor._treeState, params[i].paramID, *_adsrSliders[i]));
+    }
 }

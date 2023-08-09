@@ -22,16 +22,16 @@ extern const juce::String osc2GainID = "osc2GainID";
 extern const juce::String osc2GainName = "Gain";
 
 extern const juce::String attackID = "attackID";
-extern const juce::String attackName = "attackName";
+extern const juce::String attackName = "Attack";
 
 extern const juce::String decayID = "decayID";
-extern const juce::String decayName = "decayName";
+extern const juce::String decayName = "Decay";
 
 extern const juce::String sustainID = "sustainID";
-extern const juce::String sustainName = "sustainName";
+extern const juce::String sustainName = "Sustain";
 
 extern const juce::String releaseID = "releaseID";
-extern const juce::String releaseName = "releaseName";
+extern const juce::String releaseName = "Release";
 
 extern const juce::String osc1ChoiceID = "osc1ChoiceID";
 extern const juce::String osc1ChoiceName = "osc1ChoiceName";

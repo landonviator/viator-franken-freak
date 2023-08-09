@@ -60,6 +60,7 @@ struct MenuParameterData
         //
         std::vector<ViatorParameters::SliderParameterData>& getOsc1SliderParams(){return _osc1SliderParams;};
         std::vector<ViatorParameters::SliderParameterData>& getOsc2SliderParams(){return _osc2SliderParams;};
+        std::vector<ViatorParameters::SliderParameterData>& getADSRSliderParams(){return _adsrSliderParams;};
         
     private:
         // Adds params to the vector
@@ -77,6 +78,7 @@ struct MenuParameterData
         //
         std::vector<ViatorParameters::SliderParameterData> _osc1SliderParams;
         std::vector<ViatorParameters::SliderParameterData> _osc2SliderParams;
+        std::vector<ViatorParameters::SliderParameterData> _adsrSliderParams;
         
     };
 }

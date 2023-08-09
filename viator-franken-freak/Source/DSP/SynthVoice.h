@@ -32,8 +32,10 @@ public:
     
 private:
     juce::dsp::ProcessSpec _spec;
-    juce::ADSR _adsr;
-    juce::ADSR::Parameters _adsrParams;
+    juce::ADSR _adsr1;
+    juce::ADSR::Parameters _adsrParams1;
+    juce::ADSR _adsr2;
+    juce::ADSR::Parameters _adsrParams2;
     
     // osc 1
     juce::dsp::Oscillator<float> _mainOsc {[this](float x){return std::sin(x) * 0.4;}};

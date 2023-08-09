@@ -260,7 +260,6 @@ bool ViatorfrankenfreakAudioProcessor::isBusesLayoutSupported (const BusesLayout
 
 void ViatorfrankenfreakAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    
     _frankenFreak.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
 

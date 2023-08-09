@@ -16,14 +16,16 @@ void FrankenSynthVoice::startNote (int midiNoteNumber, float velocity, juce::Syn
     _auxOsc.setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber + tune2));
     _timbreFilter1.setParameter(viator_dsp::SVFilter<float>::ParameterId::kCutoff, _mainOsc.getFrequency() * 2.0);
     _timbreFilter2.setParameter(viator_dsp::SVFilter<float>::ParameterId::kCutoff, _auxOsc.getFrequency() * 2.0);
-    _adsr.noteOn();
+    _adsr1.noteOn();
+    _adsr2.noteOn();
 }
 
 void FrankenSynthVoice::stopNote (float velocity, bool allowTailOff)
 {
-    _adsr.noteOff();
+    _adsr1.noteOff();
+    _adsr2.noteOff();
     
-    if (!allowTailOff || !_adsr.isActive())
+    if (!allowTailOff || !_adsr1.isActive() || !_adsr2.isActive())
     {
         clearCurrentNote();
     }
@@ -41,11 +43,16 @@ void FrankenSynthVoice::controllerMoved (int controllerNumber, int newController
 
 void FrankenSynthVoice::setADSRParams(float attack, float decay, float sustain, float release)
 {
-    _adsrParams.attack = attack;
-    _adsrParams.decay = decay;
-    _adsrParams.sustain = sustain;
-    _adsrParams.release = release;
-    _adsr.setParameters(_adsrParams);
+    _adsrParams1.attack = attack;
+    _adsrParams1.decay = decay;
+    _adsrParams1.sustain = sustain;
+    _adsrParams1.release = release;
+    _adsr1.setParameters(_adsrParams1);
+    _adsrParams2.attack = attack;
+    _adsrParams2.decay = decay;
+    _adsrParams2.sustain = sustain;
+    _adsrParams2.release = release;
+    _adsr2.setParameters(_adsrParams2);
 }
 
 void FrankenSynthVoice::setOscType(OscType newOscType, OscType newOsc2Type)
@@ -203,7 +210,8 @@ void FrankenSynthVoice::prepareToPlay(double samplerate, int samplesPerBlock, in
     _timbreFilter2.setParameter(viator_dsp::SVFilter<float>::ParameterId::kType, viator_dsp::SVFilter<float>::FilterType::kHighShelf);
     _timbreFilter2.setParameter(viator_dsp::SVFilter<float>::ParameterId::kQ, 0.75);
     
-    _adsr.setSampleRate(samplerate);
+    _adsr1.setSampleRate(samplerate);
+    _adsr2.setSampleRate(samplerate);
 }
 
 void FrankenSynthVoice::renderNextBlock (juce::AudioBuffer<float> &outputBuffer, int startSample, int numSamples)
@@ -235,7 +243,7 @@ void FrankenSynthVoice::renderNextBlock (juce::AudioBuffer<float> &outputBuffer,
     }
 
     _mainOscGain.process(juce::dsp::ProcessContextReplacing<float>(block1));
-    _adsr.applyEnvelopeToBuffer(_synthBuffer, 0, _synthBuffer.getNumSamples());
+    _adsr1.applyEnvelopeToBuffer(_synthBuffer, 0, _synthBuffer.getNumSamples());
     
     // osc 2
     juce::dsp::AudioBlock<float> block2 {_synthBuffer2};
@@ -256,7 +264,7 @@ void FrankenSynthVoice::renderNextBlock (juce::AudioBuffer<float> &outputBuffer,
     }
     
     _auxOscGain.process(juce::dsp::ProcessContextReplacing<float>(block2));
-    _adsr.applyEnvelopeToBuffer(_synthBuffer2, 0, _synthBuffer2.getNumSamples());
+    _adsr2.applyEnvelopeToBuffer(_synthBuffer2, 0, _synthBuffer2.getNumSamples());
     
     // add synth buffers to main buffer
     for (int channel = 0; channel < outputBuffer.getNumChannels(); ++channel)
@@ -264,7 +272,7 @@ void FrankenSynthVoice::renderNextBlock (juce::AudioBuffer<float> &outputBuffer,
         outputBuffer.addFrom(channel, startSample, _synthBuffer, channel, 0, numSamples);
         outputBuffer.addFrom(channel, startSample, _synthBuffer2, channel, 0, numSamples);
         
-        if (!_adsr.isActive())
+        if (!_adsr1.isActive() || !_adsr2.isActive())
         {
             clearCurrentNote();
         }

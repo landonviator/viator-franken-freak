@@ -34,6 +34,11 @@ void ViatorParameters::Params::initSliderParams()
     _sliderParams.push_back({ViatorParameters::decayID, ViatorParameters::decayName, 0.0f, 1.0f, 1.0f, skew::kNoSkew, 0.0, type::kFloat});
     _sliderParams.push_back({ViatorParameters::sustainID, ViatorParameters::sustainName, 0.0f, 1.0f, 1.0f, skew::kNoSkew, 0.0, type::kFloat});
     _sliderParams.push_back({ViatorParameters::releaseID, ViatorParameters::releaseName, 0.0f, 1.0f, 1.0f, skew::kNoSkew, 0.0, type::kFloat});
+    
+    _adsrSliderParams.push_back({ViatorParameters::attackID, ViatorParameters::attackName, 0.0f, 1.0f, 1.0f, skew::kNoSkew, 0.0, type::kFloat});
+    _adsrSliderParams.push_back({ViatorParameters::decayID, ViatorParameters::decayName, 0.0f, 1.0f, 1.0f, skew::kNoSkew, 0.0, type::kFloat});
+    _adsrSliderParams.push_back({ViatorParameters::sustainID, ViatorParameters::sustainName, 0.0f, 1.0f, 1.0f, skew::kNoSkew, 0.0, type::kFloat});
+    _adsrSliderParams.push_back({ViatorParameters::releaseID, ViatorParameters::releaseName, 0.0f, 1.0f, 1.0f, skew::kNoSkew, 0.0, type::kFloat});
 }
 
 void ViatorParameters::Params::initButtonParams()
