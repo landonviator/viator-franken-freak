@@ -19,6 +19,7 @@ public:
     void setOscParams(float osc1Volume, float osc2Volume);
     void setOscTune(int newTuneInterval, int newTuneInterval2);
     void setOscTimbre(float newTimbre, float newTimbre2);
+    void setOscAmParams(float newAmFreq, float newAmDepth);
     
     enum class OscType
     {
@@ -70,6 +71,11 @@ private:
     float softCoeffA2       {1.5};
     float softCoeffB2       {-0.5};
     void applyTimbre2(juce::dsp::AudioBlock<float>& block);
+    
+    // am
+    juce::dsp::Oscillator<float> _amOsc1 {[this](float x){return std::sin(x);}};
+    juce::dsp::Oscillator<float> _amOsc2 {[this](float x){return std::sin(x);}};
+    float _amDepth = 1.0;
     
     static constexpr float _piInv = 1.0 / juce::MathConstants<float>::pi;
 };

@@ -45,7 +45,7 @@ void Osc2Comp::resized()
 void Osc2Comp::setSliderProps()
 {
     auto params = audioProcessor._parameterMap.getOsc2SliderParams();
-    auto dialImage = juce::ImageCache::getFromMemory(BinaryData::Knob_small_png, BinaryData::Knob_small_pngSize);
+    auto dialImage = juce::ImageCache::getFromMemory(BinaryData::Knob_05_png, BinaryData::Knob_05_pngSize);
     
     for (int i = 0; i < params.size(); i++)
     {

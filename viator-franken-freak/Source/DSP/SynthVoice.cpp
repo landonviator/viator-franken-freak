@@ -180,6 +180,13 @@ void FrankenSynthVoice::setOscTimbre(float newTimbre, float newTimbre2)
     }
 }
 
+void FrankenSynthVoice::setOscAmParams(float newAmFreq, float newAmDepth)
+{
+    _amOsc1.setFrequency(newAmFreq);
+    _amOsc2.setFrequency(newAmFreq);
+    _amDepth = newAmDepth;
+}
+
 void FrankenSynthVoice::prepareToPlay(double samplerate, int samplesPerBlock, int numOutputChannels)
 {
     _spec.sampleRate = samplerate;
@@ -212,6 +219,10 @@ void FrankenSynthVoice::prepareToPlay(double samplerate, int samplesPerBlock, in
     
     _adsr1.setSampleRate(samplerate);
     _adsr2.setSampleRate(samplerate);
+    
+    // am
+    _amOsc1.prepare(_spec);
+    _amOsc2.prepare(_spec);
 }
 
 void FrankenSynthVoice::renderNextBlock (juce::AudioBuffer<float> &outputBuffer, int startSample, int numSamples)
@@ -245,6 +256,17 @@ void FrankenSynthVoice::renderNextBlock (juce::AudioBuffer<float> &outputBuffer,
     _mainOscGain.process(juce::dsp::ProcessContextReplacing<float>(block1));
     _adsr1.applyEnvelopeToBuffer(_synthBuffer, 0, _synthBuffer.getNumSamples());
     
+    for (int channel = 0; channel < block1.getNumChannels(); ++channel)
+    {
+        auto* data = block1.getChannelPointer(channel);
+        
+        for (int sample = 0; sample < block1.getNumSamples(); ++sample)
+        {
+            auto x = data[sample];
+            data[sample] = x * (1.0f + _amDepth * _amOsc1.processSample(x));
+        }
+    }
+    
     // osc 2
     juce::dsp::AudioBlock<float> block2 {_synthBuffer2};
     _auxOscGain.setGainDecibels(gain2);
@@ -265,6 +287,17 @@ void FrankenSynthVoice::renderNextBlock (juce::AudioBuffer<float> &outputBuffer,
     
     _auxOscGain.process(juce::dsp::ProcessContextReplacing<float>(block2));
     _adsr2.applyEnvelopeToBuffer(_synthBuffer2, 0, _synthBuffer2.getNumSamples());
+    
+    for (int channel = 0; channel < block2.getNumChannels(); ++channel)
+    {
+        auto* data = block2.getChannelPointer(channel);
+        
+        for (int sample = 0; sample < block2.getNumSamples(); ++sample)
+        {
+            auto x = data[sample];
+            data[sample] = x * (1.0f + _amDepth * _amOsc2.processSample(x));
+        }
+    }
     
     // add synth buffers to main buffer
     for (int channel = 0; channel < outputBuffer.getNumChannels(); ++channel)

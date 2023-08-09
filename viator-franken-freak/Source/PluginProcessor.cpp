@@ -197,6 +197,9 @@ void ViatorfrankenfreakAudioProcessor::updateParameters()
     auto osc2Tune = _treeState.getRawParameterValue(ViatorParameters::osc2TuneID)->load();
     auto osc2Timbre = _treeState.getRawParameterValue(ViatorParameters::osc2TimbreID)->load();
     
+    auto amFreq = _treeState.getRawParameterValue(ViatorParameters::amFreqID)->load();
+    auto amDepth = _treeState.getRawParameterValue(ViatorParameters::amDepthID)->load();
+    
     for (int i = 0; i < _frankenFreak.getNumVoices(); i++)
     {
         if (auto voice = dynamic_cast<FrankenSynthVoice*>(_frankenFreak.getVoice(i)))
@@ -206,6 +209,7 @@ void ViatorfrankenfreakAudioProcessor::updateParameters()
             voice->setOscParams(osc1Volume, osc2Volume);
             voice->setOscTune(osc1Tune, osc2Tune);
             voice->setOscTimbre(osc1Timbre, osc2Timbre);
+            voice->setOscAmParams(amFreq, amDepth);
         }
     }
 }
@@ -271,8 +275,8 @@ bool ViatorfrankenfreakAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* ViatorfrankenfreakAudioProcessor::createEditor()
 {
-    return new ViatorfrankenfreakAudioProcessorEditor (*this);
-    //return new juce::GenericAudioProcessorEditor (*this);
+    //return new ViatorfrankenfreakAudioProcessorEditor (*this);
+    return new juce::GenericAudioProcessorEditor (*this);
 }
 
 //==============================================================================
