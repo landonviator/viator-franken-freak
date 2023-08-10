@@ -54,7 +54,6 @@ private:
     float waveCompensate   {0.25};
     float softCoeffA       {1.5};
     float softCoeffB       {-0.5};
-    void applyTimbre(juce::dsp::AudioBlock<float>& block);
     viator_dsp::SVFilter<float> _timbreFilter1;
     float _freq1 = 440.0f;
     
@@ -73,7 +72,6 @@ private:
     viator_dsp::SVFilter<float> _timbreFilter2;
     float softCoeffA2       {1.5};
     float softCoeffB2       {-0.5};
-    void applyTimbre2(juce::dsp::AudioBlock<float>& block);
     float _freq2 = 440.0f;
     
     // am
@@ -85,6 +83,8 @@ private:
     float _driftDepth = 1.0;
     float _driftFreq = 1.0;
     
+    void applyTimbre(juce::dsp::AudioBlock<float>& block, float timbre, float timreCompensate);
+    void applyAM(juce::dsp::AudioBlock<float>& block, float depth, juce::dsp::Oscillator<float>& modulator);
     void applyDrift(juce::AudioBuffer<float>& buffer, juce::dsp::Oscillator<float>& carrier, juce::dsp::Oscillator<float>& modulator, float carrierFreq, float driftDepth);
     
     static constexpr float _piInv = 1.0 / juce::MathConstants<float>::pi;

@@ -253,7 +253,7 @@ void FrankenSynthVoice::renderNextBlock (juce::AudioBuffer<float> &outputBuffer,
     // others use filter for timbre
     if (_oscType == OscType::kSin)
     {
-        applyTimbre(block1);
+        applyTimbre(block1, timbre, timbreCompensate);
     }
 
     else
@@ -264,17 +264,7 @@ void FrankenSynthVoice::renderNextBlock (juce::AudioBuffer<float> &outputBuffer,
 
     _mainOscGain.process(juce::dsp::ProcessContextReplacing<float>(block1));
     _adsr1.applyEnvelopeToBuffer(_synthBuffer, 0, _synthBuffer.getNumSamples());
-    
-    for (int channel = 0; channel < block1.getNumChannels(); ++channel)
-    {
-        auto* data = block1.getChannelPointer(channel);
-        
-        for (int sample = 0; sample < block1.getNumSamples(); ++sample)
-        {
-            auto x = data[sample];
-            data[sample] = x * (1.0f + _amDepth * _amOsc1.processSample(x));
-        }
-    }
+    applyAM(block1, _amDepth, _amOsc1);
     
     // osc 2
     juce::dsp::AudioBlock<float> block2 {_synthBuffer2};
@@ -288,7 +278,7 @@ void FrankenSynthVoice::renderNextBlock (juce::AudioBuffer<float> &outputBuffer,
     // others use filter for timbre
     if (_osc2Type == OscType::kSin)
     {
-        applyTimbre2(block2);
+        applyTimbre(block1, timbre2, timbreCompensate2);
     }
     
     else
@@ -300,16 +290,7 @@ void FrankenSynthVoice::renderNextBlock (juce::AudioBuffer<float> &outputBuffer,
     _auxOscGain.process(juce::dsp::ProcessContextReplacing<float>(block2));
     _adsr2.applyEnvelopeToBuffer(_synthBuffer2, 0, _synthBuffer2.getNumSamples());
     
-    for (int channel = 0; channel < block2.getNumChannels(); ++channel)
-    {
-        auto* data = block2.getChannelPointer(channel);
-        
-        for (int sample = 0; sample < block2.getNumSamples(); ++sample)
-        {
-            auto x = data[sample];
-            data[sample] = x * (1.0f + _amDepth * _amOsc2.processSample(x));
-        }
-    }
+    applyAM(block2, _amDepth, _amOsc2);
     
     // add synth buffers to main buffer
     for (int channel = 0; channel < outputBuffer.getNumChannels(); ++channel)
@@ -324,7 +305,7 @@ void FrankenSynthVoice::renderNextBlock (juce::AudioBuffer<float> &outputBuffer,
     }
 }
 
-void FrankenSynthVoice::applyTimbre(juce::dsp::AudioBlock<float> &block)
+void FrankenSynthVoice::applyTimbre(juce::dsp::AudioBlock<float> &block, float timbre, float timreCompensate)
 {
     for (int channel = 0; channel < block.getNumChannels(); ++channel)
     {
@@ -333,12 +314,12 @@ void FrankenSynthVoice::applyTimbre(juce::dsp::AudioBlock<float> &block)
         for (int sample = 0; sample < block.getNumSamples(); ++sample)
         {
             auto x = data[sample];
-            data[sample] = (std::tanh(-timbre * x + x) - std::tanh(pow(x, 3.0f))) * timbreCompensate;
+            data[sample] = (std::tanh(-timbre * x + x) - std::tanh(pow(x, 3.0f))) * timreCompensate;
         }
     }
 }
 
-void FrankenSynthVoice::applyTimbre2(juce::dsp::AudioBlock<float> &block)
+void FrankenSynthVoice::applyAM(juce::dsp::AudioBlock<float> &block, float depth, juce::dsp::Oscillator<float> &modulator)
 {
     for (int channel = 0; channel < block.getNumChannels(); ++channel)
     {
@@ -347,7 +328,7 @@ void FrankenSynthVoice::applyTimbre2(juce::dsp::AudioBlock<float> &block)
         for (int sample = 0; sample < block.getNumSamples(); ++sample)
         {
             auto x = data[sample];
-            data[sample] = (std::tanh(-timbre2 * x + x) - std::tanh(pow(x, 3.0f))) * timbreCompensate2;
+            data[sample] = x * (1.0f + depth * modulator.processSample(x));
         }
     }
 }
