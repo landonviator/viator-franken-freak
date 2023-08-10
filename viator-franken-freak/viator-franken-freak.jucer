@@ -72,6 +72,10 @@
           <FILE id="M7Ae3Y" name="ArpComp.cpp" compile="1" resource="0" file="Source/components/ArpComp/ArpComp.cpp"/>
           <FILE id="FwHadg" name="ArpComp.h" compile="0" resource="0" file="Source/components/ArpComp/ArpComp.h"/>
         </GROUP>
+        <GROUP id="{103EC37A-8D0D-2465-1A25-5A44F44DDB54}" name="FilterComp">
+          <FILE id="thgirU" name="FilterComp.cpp" compile="1" resource="0" file="Source/components/FilterComp/FilterComp.cpp"/>
+          <FILE id="JFHsoJ" name="FilterComp.h" compile="0" resource="0" file="Source/components/FilterComp/FilterComp.h"/>
+        </GROUP>
         <GROUP id="{01B51746-A071-61BA-B37B-C520368BE183}" name="FXComp">
           <FILE id="eU4lDF" name="FXComp.cpp" compile="1" resource="0" file="Source/components/FXComp/FXComp.cpp"/>
           <FILE id="euy856" name="FXComp.h" compile="0" resource="0" file="Source/components/FXComp/FXComp.h"/>

@@ -55,11 +55,11 @@ void ViatorParameters::Params::initSliderParams()
     
     // filter
     _sliderParams.push_back({ViatorParameters::ladderCutoffID, ViatorParameters::ladderCutoffName, 20.0f, 20000.0f, 1000.0f, skew::kSkew, 1000.0, type::kInt});
-    _sliderParams.push_back({ViatorParameters::ladderResoID, ViatorParameters::ladderResoName, 0.05f, 0.95f, 0.05f, skew::kNoSkew, 0.0, type::kFloat});
+    _sliderParams.push_back({ViatorParameters::ladderResoID, ViatorParameters::ladderResoName, 0.0f, 0.95f, 0.05f, skew::kNoSkew, 0.0, type::kFloat});
     _sliderParams.push_back({ViatorParameters::ladderDriveID, ViatorParameters::ladderDriveName, 0.0f, 20.0f, 0.0f, skew::kNoSkew, 0.0, type::kFloat});
     
     _ladderSliderParams.push_back({ViatorParameters::ladderCutoffID, ViatorParameters::ladderCutoffName, 20.0f, 20000.0f, 1000.0f, skew::kSkew, 1000.0, type::kInt});
-    _ladderSliderParams.push_back({ViatorParameters::ladderResoID, ViatorParameters::ladderResoName, 0.05f, 0.95f, 0.05f, skew::kNoSkew, 0.0, type::kFloat});
+    _ladderSliderParams.push_back({ViatorParameters::ladderResoID, ViatorParameters::ladderResoName, 0.0f, 0.95f, 0.05f, skew::kNoSkew, 0.0, type::kFloat});
     _ladderSliderParams.push_back({ViatorParameters::ladderDriveID, ViatorParameters::ladderDriveName, 0.0f, 20.0f, 0.0f, skew::kNoSkew, 0.0, type::kFloat});
 }
 

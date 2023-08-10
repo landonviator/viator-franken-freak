@@ -7,6 +7,7 @@
 #include "components/Osc2Comp/Osc2Comp.h"
 #include "components/ADSRComp/ADSRComp.h"
 #include "components/ModComp/ModComp.h"
+#include "components/FilterComp/FilterComp.h"
 
 class ViatorfrankenfreakAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
@@ -37,6 +38,9 @@ private:
     
     // mod comp
     ModComp _modComp;
+    
+    // filter comp
+    FilterComp _filterComp;
     
     // placement rects
     juce::Rectangle<int> _osc1Area;

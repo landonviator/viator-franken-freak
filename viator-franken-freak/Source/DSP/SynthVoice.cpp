@@ -226,9 +226,13 @@ void FrankenSynthVoice::prepareToPlay(double samplerate, int samplesPerBlock, in
     
     // mod
     _amOsc1.prepare(_spec);
+    _amOsc1.reset();
     _amOsc2.prepare(_spec);
+    _amOsc2.reset();
     _driftOsc1.prepare(_spec);
+    _driftOsc1.reset();
     _driftOsc2.prepare(_spec);
+    _driftOsc1.reset();
 }
 
 void FrankenSynthVoice::renderNextBlock (juce::AudioBuffer<float> &outputBuffer, int startSample, int numSamples)

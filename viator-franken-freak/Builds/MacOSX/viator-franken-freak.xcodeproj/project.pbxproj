@@ -84,6 +84,7 @@
 		E06086E88733608DD34453B3 /* include_juce_gui_extra.mm */ = {isa = PBXBuildFile; fileRef = 020D73666008E3866B73849D; };
 		E3D17016479C5AF40488D76E /* QuartzCore.framework */ = {isa = PBXBuildFile; fileRef = 60797AEA9CA75354E8428577; };
 		E4B7543E700ED6EE615A802A /* PluginEditor.cpp */ = {isa = PBXBuildFile; fileRef = 7FF2E3593A4A629F38C2E853; };
+		EB5706C235B13CA21222CAA8 /* FilterComp.cpp */ = {isa = PBXBuildFile; fileRef = 8A23CF2E47F3983CD92F3F60; };
 		EF78CFA6B7609F1402223734 /* Foundation.framework */ = {isa = PBXBuildFile; fileRef = 019F45DCBE91B5BC501618A0; };
 		F117D5C470FE288E5E0DE43D /* CoreAudioKit.framework */ = {isa = PBXBuildFile; fileRef = 54E682B6016D3E99E4E45CC6; };
 		F597E4F5F9F5587C64E4E4D6 /* include_juce_audio_formats.mm */ = {isa = PBXBuildFile; fileRef = DC0C424C31501E337CC55698; };
@@ -108,6 +109,7 @@
 		14837062182A9957FDF66EC8 /* Osc1Comp.h */ /* Osc1Comp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Osc1Comp.h; path = ../../Source/components/Osc1Comp/Osc1Comp.h; sourceTree = SOURCE_ROOT; };
 		14C1C58AFAC99F7F1B9F8D9E /* screen.png */ /* screen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = screen.png; path = ../../Source/assets/screen.png; sourceTree = SOURCE_ROOT; };
 		1567CD9541DB2E6A75EC4D89 /* juce_events */ /* juce_events */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_events; path = ../../../modules/JUCE/modules/juce_events; sourceTree = SOURCE_ROOT; };
+		161F820A6BF5780925E23DD3 /* FilterComp.h */ /* FilterComp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FilterComp.h; path = ../../Source/components/FilterComp/FilterComp.h; sourceTree = SOURCE_ROOT; };
 		185FED9D6A7C5B9EF0B5B888 /* VST3 */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "viator-franken-freak.vst3"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DEB2353F1A1CFC39C2E11B3 /* Header.cpp */ /* Header.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Header.cpp; path = ../../Source/components/Header.cpp; sourceTree = SOURCE_ROOT; };
 		20171B294F9BC4F60B78FB06 /* BinaryData9.cpp */ /* BinaryData9.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BinaryData9.cpp; path = ../../JuceLibraryCode/BinaryData9.cpp; sourceTree = SOURCE_ROOT; };
@@ -165,6 +167,7 @@
 		7FF2E3593A4A629F38C2E853 /* PluginEditor.cpp */ /* PluginEditor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PluginEditor.cpp; path = ../../Source/PluginEditor.cpp; sourceTree = SOURCE_ROOT; };
 		81A02812E18C8012DB7F7C64 /* decor_grid.png */ /* decor_grid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = decor_grid.png; path = ../../Source/assets/decor/decor_grid.png; sourceTree = SOURCE_ROOT; };
 		87C547178C9E9F85EB10C955 /* ArpComp.h */ /* ArpComp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ArpComp.h; path = ../../Source/components/ArpComp/ArpComp.h; sourceTree = SOURCE_ROOT; };
+		8A23CF2E47F3983CD92F3F60 /* FilterComp.cpp */ /* FilterComp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FilterComp.cpp; path = ../../Source/components/FilterComp/FilterComp.cpp; sourceTree = SOURCE_ROOT; };
 		8C585FB0C50B9307564CAE66 /* include_viator_modules.cpp */ /* include_viator_modules.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_viator_modules.cpp; path = ../../JuceLibraryCode/include_viator_modules.cpp; sourceTree = SOURCE_ROOT; };
 		92396271F9C9773B1EA41B51 /* juce_audio_formats */ /* juce_audio_formats */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_formats; path = ../../../modules/JUCE/modules/juce_audio_formats; sourceTree = SOURCE_ROOT; };
 		92DFAAF19B20B72537A1FB1F /* ModComp.cpp */ /* ModComp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ModComp.cpp; path = ../../Source/components/ModComp/ModComp.cpp; sourceTree = SOURCE_ROOT; };
@@ -492,6 +495,7 @@
 			children = (
 				797F1F5D4CDE48AD2FC9AB40,
 				AA98FF482DE7EC93531D9AAE,
+				D179F02EEC3A4B7E7492E064,
 				16A8E153BBC1A492EF596EEF,
 				A5AD45C09AB9E17B4EF04DE6,
 				C40D40F19200DF86B09017D8,
@@ -583,6 +587,15 @@
 				C298DC1E04691FA7A8DAB383,
 			);
 			name = vintage;
+			sourceTree = "<group>";
+		};
+		D179F02EEC3A4B7E7492E064 /* FilterComp */ = {
+			isa = PBXGroup;
+			children = (
+				8A23CF2E47F3983CD92F3F60,
+				161F820A6BF5780925E23DD3,
+			);
+			name = FilterComp;
 			sourceTree = "<group>";
 		};
 		D53BB6936A8C0EBE14DE1186 /* assets */ = {
@@ -970,6 +983,7 @@
 			files = (
 				1E20CBD0CF04FD49F4FDC394,
 				DB3C12B1AC02BCD4F1DA7A00,
+				EB5706C235B13CA21222CAA8,
 				7922A6D09A66EAB35F86AED3,
 				4541E2B7BE6F13B8EAD3E280,
 				57B21475702863F505CCCE3D,
