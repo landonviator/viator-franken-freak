@@ -199,6 +199,8 @@ void ViatorfrankenfreakAudioProcessor::updateParameters()
     
     auto amFreq = _treeState.getRawParameterValue(ViatorParameters::amFreqID)->load();
     auto amDepth = _treeState.getRawParameterValue(ViatorParameters::amDepthID)->load();
+    auto driftFreq = _treeState.getRawParameterValue(ViatorParameters::driftFreqID)->load();
+    auto driftDepth = _treeState.getRawParameterValue(ViatorParameters::driftDepthID)->load();
     
     for (int i = 0; i < _frankenFreak.getNumVoices(); i++)
     {
@@ -209,7 +211,7 @@ void ViatorfrankenfreakAudioProcessor::updateParameters()
             voice->setOscParams(osc1Volume, osc2Volume);
             voice->setOscTune(osc1Tune, osc2Tune);
             voice->setOscTimbre(osc1Timbre, osc2Timbre);
-            voice->setOscAmParams(amFreq, amDepth);
+            voice->setOscAmParams(amFreq, amDepth, driftFreq, driftDepth);
         }
     }
 }

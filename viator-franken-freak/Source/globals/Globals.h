@@ -51,6 +51,12 @@ extern const juce::String amFreqName;
 extern const juce::String amDepthID;
 extern const juce::String amDepthName;
 
+extern const juce::String driftFreqID;
+extern const juce::String driftFreqName;
+
+extern const juce::String driftDepthID;
+extern const juce::String driftDepthName;
+
 extern const juce::String amOscChoiceID;
 extern const juce::String amOscChoiceName;
 

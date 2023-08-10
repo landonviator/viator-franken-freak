@@ -50,6 +50,12 @@ extern const juce::String amFreqName = "AM Freq";
 extern const juce::String amDepthID = "amDepthID";
 extern const juce::String amDepthName = "Am Depth";
 
+extern const juce::String driftFreqID = "driftFreqID";
+extern const juce::String driftFreqName = "Drift";
+
+extern const juce::String driftDepthID = "driftDepthID";
+extern const juce::String driftDepthName = "Depth";
+
 extern const juce::String amOscChoiceID = "amOscChoiceID";
 extern const juce::String amOscChoiceName = "AM Choice";
 }

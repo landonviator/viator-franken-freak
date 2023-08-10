@@ -12,8 +12,8 @@ bool FrankenSynthVoice::canPlaySound (juce::SynthesiserSound *sound)
 
 void FrankenSynthVoice::startNote (int midiNoteNumber, float velocity, juce::SynthesiserSound *sound, int currentPitchWheelPosition)
 {
-    _mainOsc.setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber + tune));
-    _auxOsc.setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber + tune2));
+    _freq1 = juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber + tune);
+    _freq2 = juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber + tune2);
     _timbreFilter1.setParameter(viator_dsp::SVFilter<float>::ParameterId::kCutoff, _mainOsc.getFrequency() * 2.0);
     _timbreFilter2.setParameter(viator_dsp::SVFilter<float>::ParameterId::kCutoff, _auxOsc.getFrequency() * 2.0);
     _adsr1.noteOn();
@@ -65,7 +65,7 @@ void FrankenSynthVoice::setOscType(OscType newOscType, OscType newOsc2Type)
         case OscType::kSin:
         {
             _mainOsc.reset();
-            _mainOsc.initialise([this](float x){return std::sin(x) * 0.4;});
+            _mainOsc.initialise([this](float x){return std::sin(x) * sinCompensate;});
             break;
         }
             
@@ -89,7 +89,7 @@ void FrankenSynthVoice::setOscType(OscType newOscType, OscType newOsc2Type)
         case OscType::kSin:
         {
             _auxOsc.reset();
-            _auxOsc.initialise([this](float x){return std::sin(x) * 0.4;});
+            _auxOsc.initialise([this](float x){return std::sin(x) * sinCompensate;});
             break;
         }
             
@@ -180,11 +180,15 @@ void FrankenSynthVoice::setOscTimbre(float newTimbre, float newTimbre2)
     }
 }
 
-void FrankenSynthVoice::setOscAmParams(float newAmFreq, float newAmDepth)
+void FrankenSynthVoice::setOscAmParams(float newAmFreq, float newAmDepth, float newDrift, float newDriftDepth)
 {
     _amOsc1.setFrequency(newAmFreq);
     _amOsc2.setFrequency(newAmFreq);
+    _driftOsc1.setFrequency(newAmFreq);
+    _driftOsc2.setFrequency(newAmFreq);
     _amDepth = newAmDepth;
+    _driftDepth = newDriftDepth;
+    _driftFreq = newDrift;
 }
 
 void FrankenSynthVoice::prepareToPlay(double samplerate, int samplesPerBlock, int numOutputChannels)
@@ -220,9 +224,11 @@ void FrankenSynthVoice::prepareToPlay(double samplerate, int samplesPerBlock, in
     _adsr1.setSampleRate(samplerate);
     _adsr2.setSampleRate(samplerate);
     
-    // am
+    // mod
     _amOsc1.prepare(_spec);
     _amOsc2.prepare(_spec);
+    _driftOsc1.prepare(_spec);
+    _driftOsc2.prepare(_spec);
 }
 
 void FrankenSynthVoice::renderNextBlock (juce::AudioBuffer<float> &outputBuffer, int startSample, int numSamples)
@@ -238,8 +244,11 @@ void FrankenSynthVoice::renderNextBlock (juce::AudioBuffer<float> &outputBuffer,
     // osc 1
     juce::dsp::AudioBlock<float> block1 {_synthBuffer};
     _mainOscGain.setGainDecibels(gain);
-    _mainOsc.process(juce::dsp::ProcessContextReplacing<float>(block1));
-
+    _mainOsc.setFrequency(_freq1 * 0.5);
+    _driftOsc1.setFrequency(_driftFreq);
+    
+    applyDrift(_synthBuffer, _mainOsc, _driftOsc1, _freq1, _driftDepth);
+    
     // sin uses clipper for timbre
     // others use filter for timbre
     if (_oscType == OscType::kSin)
@@ -270,7 +279,10 @@ void FrankenSynthVoice::renderNextBlock (juce::AudioBuffer<float> &outputBuffer,
     // osc 2
     juce::dsp::AudioBlock<float> block2 {_synthBuffer2};
     _auxOscGain.setGainDecibels(gain2);
-    _auxOsc.process(juce::dsp::ProcessContextReplacing<float>(block2));
+    _auxOsc.setFrequency(_freq2 * 0.5);
+    _driftOsc2.setFrequency(_driftFreq);
+    
+    applyDrift(_synthBuffer2, _auxOsc, _driftOsc2, _freq2, _driftDepth);
     
     // sin uses clipper for timbre
     // others use filter for timbre
@@ -336,6 +348,23 @@ void FrankenSynthVoice::applyTimbre2(juce::dsp::AudioBlock<float> &block)
         {
             auto x = data[sample];
             data[sample] = (std::tanh(-timbre2 * x + x) - std::tanh(pow(x, 3.0f))) * timbreCompensate2;
+        }
+    }
+}
+
+void FrankenSynthVoice::applyDrift(juce::AudioBuffer<float> &buffer, juce::dsp::Oscillator<float> &carrier, juce::dsp::Oscillator<float> &modulator, float carrierFreq, float driftDepth)
+{
+    auto data = buffer.getArrayOfWritePointers();
+    
+    for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
+    {
+        for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+        {
+            auto x = data[channel][sample];
+            auto driftSignal = modulator.processSample(x);
+            auto driftFreq = driftSignal * driftDepth;
+            carrier.setFrequency(carrierFreq * 0.5 + driftFreq);
+            data[channel][sample] = carrier.processSample(x);
         }
     }
 }

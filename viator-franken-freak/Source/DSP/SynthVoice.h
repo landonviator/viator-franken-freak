@@ -19,7 +19,7 @@ public:
     void setOscParams(float osc1Volume, float osc2Volume);
     void setOscTune(int newTuneInterval, int newTuneInterval2);
     void setOscTimbre(float newTimbre, float newTimbre2);
-    void setOscAmParams(float newAmFreq, float newAmDepth);
+    void setOscAmParams(float newAmFreq, float newAmDepth, float newDrift, float newDriftDepth);
     
     enum class OscType
     {
@@ -38,8 +38,10 @@ private:
     juce::ADSR _adsr2;
     juce::ADSR::Parameters _adsrParams2;
     
+    float sinCompensate = 0.3;
+    
     // osc 1
-    juce::dsp::Oscillator<float> _mainOsc {[this](float x){return std::sin(x) * 0.4;}};
+    juce::dsp::Oscillator<float> _mainOsc {[this](float x){return std::sin(x) * sinCompensate;}};
     juce::dsp::Gain<float> _mainOscGain;
     juce::dsp::Gain<float> _mainOscCompensation;
     juce::AudioBuffer<float> _synthBuffer;
@@ -54,9 +56,10 @@ private:
     float softCoeffB       {-0.5};
     void applyTimbre(juce::dsp::AudioBlock<float>& block);
     viator_dsp::SVFilter<float> _timbreFilter1;
+    float _freq1 = 440.0f;
     
     // osc 2
-    juce::dsp::Oscillator<float> _auxOsc {[this](float x){return std::sin(x) * 0.4;}};
+    juce::dsp::Oscillator<float> _auxOsc {[this](float x){return std::sin(x) * sinCompensate;}};
     juce::dsp::Gain<float> _auxOscGain;
     juce::dsp::Gain<float> _auxOscCompensation;
     juce::AudioBuffer<float> _synthBuffer2;
@@ -71,11 +74,18 @@ private:
     float softCoeffA2       {1.5};
     float softCoeffB2       {-0.5};
     void applyTimbre2(juce::dsp::AudioBlock<float>& block);
+    float _freq2 = 440.0f;
     
     // am
     juce::dsp::Oscillator<float> _amOsc1 {[this](float x){return std::sin(x);}};
     juce::dsp::Oscillator<float> _amOsc2 {[this](float x){return std::sin(x);}};
+    juce::dsp::Oscillator<float> _driftOsc1 {[this](float x){return std::sin(x);}};
+    juce::dsp::Oscillator<float> _driftOsc2 {[this](float x){return std::sin(x);}};
     float _amDepth = 1.0;
+    float _driftDepth = 1.0;
+    float _driftFreq = 1.0;
+    
+    void applyDrift(juce::AudioBuffer<float>& buffer, juce::dsp::Oscillator<float>& carrier, juce::dsp::Oscillator<float>& modulator, float carrierFreq, float driftDepth);
     
     static constexpr float _piInv = 1.0 / juce::MathConstants<float>::pi;
 };

@@ -45,6 +45,8 @@ void ViatorParameters::Params::initSliderParams()
     // am
     _sliderParams.push_back({ViatorParameters::amFreqID, ViatorParameters::amFreqName, 0.1f, 10.0f, 1.0f, skew::kSkew, 1.0, type::kFloat});
     _sliderParams.push_back({ViatorParameters::amDepthID, ViatorParameters::amDepthName, 0.0f, 1.0f, 0.0f, skew::kNoSkew, 0.0, type::kFloat});
+    _sliderParams.push_back({ViatorParameters::driftFreqID, ViatorParameters::driftFreqName, 0.1f, 10.0f, 1.0f, skew::kSkew, 1.0, type::kFloat});
+    _sliderParams.push_back({ViatorParameters::driftDepthID, ViatorParameters::driftDepthName, 0.0f, 100.0f, 0.0f, skew::kSkew, 15.0, type::kFloat});
 }
 
 void ViatorParameters::Params::initButtonParams()
