@@ -52,16 +52,28 @@ void ViatorParameters::Params::initSliderParams()
     _modSliderParams.push_back({ViatorParameters::amDepthID, ViatorParameters::amDepthName, 0.0f, 1.0f, 0.0f, skew::kNoSkew, 0.0, type::kFloat});
     _modSliderParams.push_back({ViatorParameters::driftFreqID, ViatorParameters::driftFreqName, 0.1f, 10.0f, 1.0f, skew::kSkew, 1.0, type::kFloat});
     _modSliderParams.push_back({ViatorParameters::driftDepthID, ViatorParameters::driftDepthName, 0.0f, 100.0f, 0.0f, skew::kSkew, 15.0, type::kFloat});
+    
+    // filter
+    _sliderParams.push_back({ViatorParameters::ladderCutoffID, ViatorParameters::ladderCutoffName, 20.0f, 20000.0f, 1000.0f, skew::kSkew, 1000.0, type::kInt});
+    _sliderParams.push_back({ViatorParameters::ladderResoID, ViatorParameters::ladderResoName, 0.05f, 0.95f, 0.05f, skew::kNoSkew, 0.0, type::kFloat});
+    _sliderParams.push_back({ViatorParameters::ladderDriveID, ViatorParameters::ladderDriveName, 0.0f, 20.0f, 0.0f, skew::kNoSkew, 0.0, type::kFloat});
+    
+    _ladderSliderParams.push_back({ViatorParameters::ladderCutoffID, ViatorParameters::ladderCutoffName, 20.0f, 20000.0f, 1000.0f, skew::kSkew, 1000.0, type::kInt});
+    _ladderSliderParams.push_back({ViatorParameters::ladderResoID, ViatorParameters::ladderResoName, 0.05f, 0.95f, 0.05f, skew::kNoSkew, 0.0, type::kFloat});
+    _ladderSliderParams.push_back({ViatorParameters::ladderDriveID, ViatorParameters::ladderDriveName, 0.0f, 20.0f, 0.0f, skew::kNoSkew, 0.0, type::kFloat});
 }
 
 void ViatorParameters::Params::initButtonParams()
 {
+    _buttonParams.push_back({ViatorParameters::filterPowerID, ViatorParameters::filterPowerName, true});
 }
 
 void ViatorParameters::Params::initMenuParams()
 {
     juce::StringArray choices = {"Sine", "Square", "Saw"};
+    juce::StringArray ladderChoices = {"LP12", "HP12", "BP12", "LP24", "HP24", "BP24"};
     _menuParams.push_back({ViatorParameters::osc1ChoiceID, ViatorParameters::osc1ChoiceName, choices, 0});
     _menuParams.push_back({ViatorParameters::osc2ChoiceID, ViatorParameters::osc2ChoiceName, choices, 0});
     _menuParams.push_back({ViatorParameters::amOscChoiceID, ViatorParameters::amOscChoiceName, choices, 0});
+    _menuParams.push_back({ViatorParameters::ladderChoiceID, ViatorParameters::ladderChoiceName, ladderChoices, 0});
 }

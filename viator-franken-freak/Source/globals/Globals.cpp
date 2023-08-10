@@ -58,4 +58,20 @@ extern const juce::String driftDepthName = "Depth";
 
 extern const juce::String amOscChoiceID = "amOscChoiceID";
 extern const juce::String amOscChoiceName = "AM Choice";
+
+// filter
+extern const juce::String ladderCutoffID = "ladderCutoffID";
+extern const juce::String ladderCutoffName = "Cutoff";
+
+extern const juce::String ladderResoID = "ladderResoID";
+extern const juce::String ladderResoName = "Reso";
+
+extern const juce::String ladderDriveID = "ladderDriveID";
+extern const juce::String ladderDriveName = "Drive";
+
+extern const juce::String ladderChoiceID = "ladderChoiceID";
+extern const juce::String ladderChoiceName = "Filter Type";
+
+extern const juce::String filterPowerID = "filterPowerID";
+extern const juce::String filterPowerName = "Power";
 }

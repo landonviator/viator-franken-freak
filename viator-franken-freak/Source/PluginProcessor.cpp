@@ -178,6 +178,12 @@ void ViatorfrankenfreakAudioProcessor::parameterChanged(const juce::String &para
         }
     }
     
+    if (parameterID == ViatorParameters::ladderChoiceID)
+    {
+        auto filterType = _treeState.getRawParameterValue(ViatorParameters::ladderChoiceID)->load();
+        _synthFilter.setMode(static_cast<juce::dsp::LadderFilter<float>::Mode>(filterType));
+    }
+    
     updateParameters();
     
 }
@@ -214,20 +220,35 @@ void ViatorfrankenfreakAudioProcessor::updateParameters()
             voice->setOscAmParams(amFreq, amDepth, driftFreq, driftDepth);
         }
     }
+
+    auto filterCutoff = _treeState.getRawParameterValue(ViatorParameters::ladderCutoffID)->load();
+    auto filterReso = _treeState.getRawParameterValue(ViatorParameters::ladderResoID)->load();
+    auto filterDrive = _treeState.getRawParameterValue(ViatorParameters::ladderDriveID)->load();
+    _synthFilter.setCutoffFrequencyHz(filterCutoff);
+    _synthFilter.setResonance(filterReso);
+    _synthFilter.setDrive(juce::Decibels::decibelsToGain(filterDrive));
 }
 
 //==============================================================================
 void ViatorfrankenfreakAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    _frankenFreak.setCurrentPlaybackSampleRate(sampleRate);
+    _spec.sampleRate = sampleRate;
+    _spec.numChannels = getTotalNumOutputChannels();
+    _spec.maximumBlockSize = samplesPerBlock;
+    
+    _frankenFreak.setCurrentPlaybackSampleRate(_spec.sampleRate);
     
     for (int i = 0; i < _frankenFreak.getNumVoices(); i++)
     {
         if (auto voice = dynamic_cast<FrankenSynthVoice*>(_frankenFreak.getVoice(i)))
         {
-            voice->prepareToPlay(sampleRate, sampleRate, getTotalNumOutputChannels());
+            voice->prepareToPlay(_spec.sampleRate, _spec.maximumBlockSize, getTotalNumOutputChannels());
         }
     }
+    
+    _synthFilter.prepare(_spec);
+    auto filterType = _treeState.getRawParameterValue(ViatorParameters::ladderChoiceID)->load();
+    _synthFilter.setMode(static_cast<juce::dsp::LadderFilter<float>::Mode>(filterType));
     
     updateParameters();
 }
@@ -266,7 +287,15 @@ bool ViatorfrankenfreakAudioProcessor::isBusesLayoutSupported (const BusesLayout
 
 void ViatorfrankenfreakAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+    juce::dsp::AudioBlock<float> block {buffer};
+    auto filterPower = _treeState.getRawParameterValue(ViatorParameters::filterPowerID)->load();
+    
     _frankenFreak.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    
+    if (filterPower)
+    {
+        _synthFilter.process(juce::dsp::ProcessContextReplacing<float>(block));
+    }
 }
 
 //==============================================================================
@@ -277,8 +306,8 @@ bool ViatorfrankenfreakAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* ViatorfrankenfreakAudioProcessor::createEditor()
 {
-    return new ViatorfrankenfreakAudioProcessorEditor (*this);
-    //return new juce::GenericAudioProcessorEditor (*this);
+    //return new ViatorfrankenfreakAudioProcessorEditor (*this);
+    return new juce::GenericAudioProcessorEditor (*this);
 }
 
 //==============================================================================
