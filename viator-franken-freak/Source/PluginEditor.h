@@ -6,6 +6,7 @@
 #include "components/Osc1Comp/Osc1Comp.h"
 #include "components/Osc2Comp/Osc2Comp.h"
 #include "components/ADSRComp/ADSRComp.h"
+#include "components/ModComp/ModComp.h"
 
 class ViatorfrankenfreakAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
@@ -33,6 +34,9 @@ private:
     
     // adsr
     ADSRComp _adsrComp;
+    
+    // mod comp
+    ModComp _modComp;
     
     // placement rects
     juce::Rectangle<int> _osc1Area;

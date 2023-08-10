@@ -6,6 +6,7 @@ ViatorfrankenfreakAudioProcessorEditor::ViatorfrankenfreakAudioProcessorEditor (
 , _osc1Comp(audioProcessor)
 , _osc2Comp(audioProcessor)
 , _adsrComp(audioProcessor)
+, _modComp(audioProcessor)
 {
     // header
     addAndMakeVisible(_headerComp);
@@ -18,6 +19,9 @@ ViatorfrankenfreakAudioProcessorEditor::ViatorfrankenfreakAudioProcessorEditor (
     
     // adsr
     addAndMakeVisible(_adsrComp);
+    
+    // mod
+    addAndMakeVisible(_modComp);
     
     // window
     viator_utils::PluginWindow::setPluginWindowSize(0, 0, *this, 1.5, 1.0);
@@ -84,5 +88,7 @@ void ViatorfrankenfreakAudioProcessorEditor::resized()
     const auto modX = _adsrArea.getRight() + _osc1Area.getWidth() * adsrWidthMult;
     const auto filterWidthMult = 1.06;
     _modArea.setBounds(modX, osc1AreaY, osc1AreaWidth * filterWidthMult, osc1AreaHeight);
+    _modComp.setBounds(modX, osc1AreaY, osc1AreaWidth * filterWidthMult, osc1AreaHeight);
+    
     _filterArea.setBounds(modX, osc2AreaY, osc1AreaWidth * filterWidthMult, osc1AreaHeight);
 }

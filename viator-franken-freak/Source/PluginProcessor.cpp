@@ -277,22 +277,29 @@ bool ViatorfrankenfreakAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* ViatorfrankenfreakAudioProcessor::createEditor()
 {
-    //return new ViatorfrankenfreakAudioProcessorEditor (*this);
-    return new juce::GenericAudioProcessorEditor (*this);
+    return new ViatorfrankenfreakAudioProcessorEditor (*this);
+    //return new juce::GenericAudioProcessorEditor (*this);
 }
 
 //==============================================================================
 void ViatorfrankenfreakAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
+    // Save params
+    //_treeState.state.appendChild(_variableTree, nullptr);
+    juce::MemoryOutputStream stream(destData, false);
+    _treeState.state.writeToStream (stream);
 }
 
 void ViatorfrankenfreakAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
+    // Recall params
+    auto tree = juce::ValueTree::readFromData (data, size_t(sizeInBytes));
+    //_variableTree = tree.getChildWithName("Variables");
+    
+    if (tree.isValid())
+    {
+        _treeState.state = tree;
+    }
 }
 
 //==============================================================================
