@@ -74,4 +74,17 @@ extern const juce::String ladderChoiceName = "Filter Type";
 
 extern const juce::String filterPowerID = "filterPowerID";
 extern const juce::String filterPowerName = "Power";
+
+// bit crusher
+extern const juce::String crusherBitDepthID = "crusherBitDepthID";
+extern const juce::String crusherBitDepthName = "Bit Depth";
+
+extern const juce::String crusherMixID = "crusherMixID";
+extern const juce::String crusherMixName = "Mix";
+
+extern const juce::String crusherVolumeID = "crusherVolumeID";
+extern const juce::String crusherVolumeName = "Volume";
+
+extern const juce::String crusherPowerID = "crusherPowerID";
+extern const juce::String crusherPowerName = "Power";
 }

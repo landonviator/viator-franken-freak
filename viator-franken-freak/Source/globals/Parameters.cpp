@@ -56,16 +56,26 @@ void ViatorParameters::Params::initSliderParams()
     // filter
     _sliderParams.push_back({ViatorParameters::ladderCutoffID, ViatorParameters::ladderCutoffName, 20.0f, 20000.0f, 1000.0f, skew::kSkew, 1000.0, type::kInt});
     _sliderParams.push_back({ViatorParameters::ladderResoID, ViatorParameters::ladderResoName, 0.0f, 0.95f, 0.05f, skew::kNoSkew, 0.0, type::kFloat});
-    _sliderParams.push_back({ViatorParameters::ladderDriveID, ViatorParameters::ladderDriveName, 0.0f, 20.0f, 0.0f, skew::kNoSkew, 0.0, type::kFloat});
     
     _ladderSliderParams.push_back({ViatorParameters::ladderCutoffID, ViatorParameters::ladderCutoffName, 20.0f, 20000.0f, 1000.0f, skew::kSkew, 1000.0, type::kInt});
     _ladderSliderParams.push_back({ViatorParameters::ladderResoID, ViatorParameters::ladderResoName, 0.0f, 0.95f, 0.05f, skew::kNoSkew, 0.0, type::kFloat});
-    _ladderSliderParams.push_back({ViatorParameters::ladderDriveID, ViatorParameters::ladderDriveName, 0.0f, 20.0f, 0.0f, skew::kNoSkew, 0.0, type::kFloat});
+    
+    // crusher
+    _sliderParams.push_back({ViatorParameters::ladderDriveID, ViatorParameters::ladderDriveName, 0.0f, 20.0f, 0.0f, skew::kNoSkew, 0.0, type::kFloat});
+    _sliderParams.push_back({ViatorParameters::crusherBitDepthID, ViatorParameters::crusherBitDepthName, 1.0f, 16.0f, 1.0f, skew::kSkew, 14.0, type::kFloat});
+    _sliderParams.push_back({ViatorParameters::crusherMixID, ViatorParameters::crusherMixName, 0.0f, 100.0f, 100.0f, skew::kNoSkew, 0.0, type::kInt});
+    _sliderParams.push_back({ViatorParameters::crusherVolumeID, ViatorParameters::crusherVolumeName, -20.0f, 20.0f, 0.0f, skew::kNoSkew, 0.0, type::kFloat});
+    
+    _crusherSliderParams.push_back({ViatorParameters::ladderDriveID, ViatorParameters::ladderDriveName, 0.0f, 20.0f, 0.0f, skew::kNoSkew, 0.0, type::kFloat});
+    _crusherSliderParams.push_back({ViatorParameters::crusherBitDepthID, ViatorParameters::crusherBitDepthName, 1.0f, 16.0f, 1.0f, skew::kSkew, 14.0, type::kFloat});
+    _crusherSliderParams.push_back({ViatorParameters::crusherMixID, ViatorParameters::crusherMixName, 0.0f, 100.0f, 100.0f, skew::kNoSkew, 0.0, type::kInt});
+    _crusherSliderParams.push_back({ViatorParameters::crusherVolumeID, ViatorParameters::crusherVolumeName, -20.0f, 20.0f, 0.0f, skew::kNoSkew, 0.0, type::kFloat});
 }
 
 void ViatorParameters::Params::initButtonParams()
 {
-    _buttonParams.push_back({ViatorParameters::filterPowerID, ViatorParameters::filterPowerName, true});
+    _buttonParams.push_back({ViatorParameters::filterPowerID, ViatorParameters::filterPowerName, false});
+    _buttonParams.push_back({ViatorParameters::crusherPowerID, ViatorParameters::crusherPowerName, false});
 }
 
 void ViatorParameters::Params::initMenuParams()

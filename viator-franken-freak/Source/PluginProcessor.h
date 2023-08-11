@@ -54,6 +54,7 @@ private:
     juce::Synthesiser _frankenFreak;
     juce::dsp::ProcessSpec _spec;
     juce::dsp::LadderFilter<float> _synthFilter;
+    viator_dsp::BitCrusher<float> _bitCrusher;
     
     // parameters
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
