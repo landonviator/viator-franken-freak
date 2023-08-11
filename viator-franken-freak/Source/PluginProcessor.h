@@ -55,6 +55,10 @@ private:
     juce::dsp::ProcessSpec _spec;
     juce::dsp::LadderFilter<float> _synthFilter;
     viator_dsp::BitCrusher<float> _bitCrusher;
+    juce::dsp::Reverb _reverb;
+    juce::dsp::Reverb::Parameters _reverbParams;
+    juce::dsp::Gain<float> _reverbCompensate;
+    juce::dsp::Gain<float> _reverbVolume;
     
     // parameters
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();

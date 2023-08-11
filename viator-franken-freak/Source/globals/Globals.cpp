@@ -87,4 +87,20 @@ extern const juce::String crusherVolumeName = "Volume";
 
 extern const juce::String crusherPowerID = "crusherPowerID";
 extern const juce::String crusherPowerName = "Power";
+
+// reverb
+extern const juce::String verbSizeID = "verbSizeID";
+extern const juce::String verbSizeName = "Size";
+
+extern const juce::String verbDampID = "verbDampID";
+extern const juce::String verbDampName = "Tone";
+
+extern const juce::String verbVolumeID = "verbWidthID";
+extern const juce::String verbVolumeName = "Volume";
+
+extern const juce::String verbMixID = "verbMixID";
+extern const juce::String verbMixName = "Mix";
+
+extern const juce::String verbPowerID = "verbPowerID";
+extern const juce::String verbPowerName = "Power";
 }

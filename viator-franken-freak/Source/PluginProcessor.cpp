@@ -234,6 +234,18 @@ void ViatorfrankenfreakAudioProcessor::updateParameters()
     _bitCrusher.setDrive(drive);
     _bitCrusher.setMix(crusherMix);
     _bitCrusher.setVolume(crusherVolume);
+    
+    auto verbSize = _treeState.getRawParameterValue(ViatorParameters::verbSizeID)->load() * 0.01;
+    auto verbDamp = _treeState.getRawParameterValue(ViatorParameters::verbDampID)->load() * 0.01;
+    auto verbVolume = _treeState.getRawParameterValue(ViatorParameters::verbVolumeID)->load();
+    auto verbMix = _treeState.getRawParameterValue(ViatorParameters::verbMixID)->load() * 0.01;
+    _reverbParams.roomSize = verbSize;
+    _reverbParams.damping = verbDamp;
+    _reverbParams.width = 1.0;
+    _reverbParams.wetLevel = verbMix;
+    _reverbParams.dryLevel = 1.0;
+    _reverb.setParameters(_reverbParams);
+    _reverbVolume.setGainDecibels(verbVolume);
 }
 
 //==============================================================================
@@ -258,6 +270,11 @@ void ViatorfrankenfreakAudioProcessor::prepareToPlay (double sampleRate, int sam
     _synthFilter.setMode(static_cast<juce::dsp::LadderFilter<float>::Mode>(filterType));
     
     _bitCrusher.prepare(_spec);
+    _reverb.prepare(_spec);
+    _reverbCompensate.prepare(_spec);
+    _reverbCompensate.setGainDecibels(-6.1);
+    _reverbVolume.prepare(_spec);
+    _reverbVolume.setRampDurationSeconds(0.02);
     
     updateParameters();
 }
@@ -299,6 +316,7 @@ void ViatorfrankenfreakAudioProcessor::processBlock (juce::AudioBuffer<float>& b
     juce::dsp::AudioBlock<float> block {buffer};
     auto filterPower = _treeState.getRawParameterValue(ViatorParameters::filterPowerID)->load();
     auto crusherPower = _treeState.getRawParameterValue(ViatorParameters::crusherPowerID)->load();
+    auto verbPower = _treeState.getRawParameterValue(ViatorParameters::verbPowerID)->load();
     
     _frankenFreak.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
     
@@ -311,6 +329,16 @@ void ViatorfrankenfreakAudioProcessor::processBlock (juce::AudioBuffer<float>& b
     {
         _bitCrusher.processBuffer(buffer);
     }
+    
+    if (verbPower)
+    {
+        _reverb.process(juce::dsp::ProcessContextReplacing<float>(block));
+        _reverbCompensate.process(juce::dsp::ProcessContextReplacing<float>(block));
+        _reverbVolume.process(juce::dsp::ProcessContextReplacing<float>(block));
+    }
+    
+    // safe clip
+    viator_utils::utils::hardClipBlock(block);
 }
 
 //==============================================================================
@@ -319,10 +347,10 @@ bool ViatorfrankenfreakAudioProcessor::hasEditor() const
     return true; // (change this to false if you choose to not supply an editor)
 }
 
-juce::AudioProcessorEditor* ViatorfrankenfreakAudioProcessor::createEditor()
+juce::AudioProcessorEditor* ViatorfrankenfreakAudioProcessor::createEditor() 
 {
-    //return new ViatorfrankenfreakAudioProcessorEditor (*this);
-    return new juce::GenericAudioProcessorEditor (*this);
+    return new ViatorfrankenfreakAudioProcessorEditor (*this);
+    //return new juce::GenericAudioProcessorEditor (*this);
 }
 
 //==============================================================================

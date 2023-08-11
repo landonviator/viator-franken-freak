@@ -70,12 +70,24 @@ void ViatorParameters::Params::initSliderParams()
     _crusherSliderParams.push_back({ViatorParameters::crusherBitDepthID, ViatorParameters::crusherBitDepthName, 1.0f, 16.0f, 1.0f, skew::kSkew, 14.0, type::kFloat});
     _crusherSliderParams.push_back({ViatorParameters::crusherMixID, ViatorParameters::crusherMixName, 0.0f, 100.0f, 100.0f, skew::kNoSkew, 0.0, type::kInt});
     _crusherSliderParams.push_back({ViatorParameters::crusherVolumeID, ViatorParameters::crusherVolumeName, -20.0f, 20.0f, 0.0f, skew::kNoSkew, 0.0, type::kFloat});
+    
+    // reverb
+    _sliderParams.push_back({ViatorParameters::verbSizeID, ViatorParameters::verbSizeName, 0.0f, 100.0f, 50.0f, skew::kNoSkew, 0.0, type::kInt});
+    _sliderParams.push_back({ViatorParameters::verbDampID, ViatorParameters::verbDampName, 0.0f, 100.0f, 50.0f, skew::kNoSkew, 0.0, type::kInt});
+    _sliderParams.push_back({ViatorParameters::verbMixID, ViatorParameters::verbMixName, 0.0f, 100.0f, 50.0f, skew::kNoSkew, 0.0, type::kInt});
+    _sliderParams.push_back({ViatorParameters::verbVolumeID, ViatorParameters::verbVolumeName, -20.0f, 20.0f, 0.0f, skew::kNoSkew, 0.0, type::kFloat});
+    
+    _reverbSliderParams.push_back({ViatorParameters::verbSizeID, ViatorParameters::verbSizeName, 0.0f, 100.0f, 50.0f, skew::kNoSkew, 0.0, type::kInt});
+    _reverbSliderParams.push_back({ViatorParameters::verbDampID, ViatorParameters::verbDampName, 0.0f, 100.0f, 50.0f, skew::kNoSkew, 0.0, type::kInt});
+    _reverbSliderParams.push_back({ViatorParameters::verbMixID, ViatorParameters::verbMixName, 0.0f, 100.0f, 50.0f, skew::kNoSkew, 0.0, type::kInt});
+    _reverbSliderParams.push_back({ViatorParameters::verbVolumeID, ViatorParameters::verbVolumeName, -20.0f, 20.0f, 0.0f, skew::kNoSkew, 0.0, type::kFloat});
 }
 
 void ViatorParameters::Params::initButtonParams()
 {
     _buttonParams.push_back({ViatorParameters::filterPowerID, ViatorParameters::filterPowerName, false});
     _buttonParams.push_back({ViatorParameters::crusherPowerID, ViatorParameters::crusherPowerName, false});
+    _buttonParams.push_back({ViatorParameters::verbPowerID, ViatorParameters::verbPowerName, false});
 }
 
 void ViatorParameters::Params::initMenuParams()

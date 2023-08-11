@@ -88,4 +88,20 @@ extern const juce::String crusherVolumeName;
 
 extern const juce::String crusherPowerID;
 extern const juce::String crusherPowerName;
+
+// reverb
+extern const juce::String verbSizeID;
+extern const juce::String verbSizeName;
+
+extern const juce::String verbDampID;
+extern const juce::String verbDampName;
+
+extern const juce::String verbVolumeID;
+extern const juce::String verbVolumeName;
+
+extern const juce::String verbMixID;
+extern const juce::String verbMixName;
+
+extern const juce::String verbPowerID;
+extern const juce::String verbPowerName;
 }

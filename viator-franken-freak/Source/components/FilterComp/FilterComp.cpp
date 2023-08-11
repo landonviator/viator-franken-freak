@@ -56,7 +56,7 @@ void FilterComp::setMenuProps()
 void FilterComp::setSliderProps()
 {
     auto params = audioProcessor._parameterMap.getLadderSliderParams();
-    auto dialImage = juce::ImageCache::getFromMemory(BinaryData::Knob_04_png, BinaryData::Knob_04_pngSize);
+    auto dialImage = juce::ImageCache::getFromMemory(BinaryData::Knob_03_png, BinaryData::Knob_03_pngSize);
     
     for (int i = 0; i < params.size(); i++)
     {
