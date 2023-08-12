@@ -60,6 +60,12 @@ private:
     juce::dsp::Gain<float> _reverbCompensate;
     juce::dsp::Gain<float> _reverbVolume;
     
+    juce::SortedSet<int> notes;
+    int currentNote, lastNoteValue;
+    int time;
+    float rate;
+    void arpeggiate(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages);
+    
     // parameters
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     void parameterChanged (const juce::String& parameterID, float newValue) override;

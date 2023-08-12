@@ -276,6 +276,14 @@ void ViatorfrankenfreakAudioProcessor::prepareToPlay (double sampleRate, int sam
     _reverbVolume.prepare(_spec);
     _reverbVolume.setRampDurationSeconds(0.02);
     
+    juce::ignoreUnused (samplesPerBlock);
+
+    notes.clear();
+    currentNote = 0;
+    lastNoteValue = -1;
+    time = 0;
+    rate = static_cast<float> (sampleRate);
+    
     updateParameters();
 }
 
@@ -318,27 +326,66 @@ void ViatorfrankenfreakAudioProcessor::processBlock (juce::AudioBuffer<float>& b
     auto crusherPower = _treeState.getRawParameterValue(ViatorParameters::crusherPowerID)->load();
     auto verbPower = _treeState.getRawParameterValue(ViatorParameters::verbPowerID)->load();
     
+    arpeggiate(buffer, midiMessages);
     _frankenFreak.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
-    
+
     if (filterPower)
     {
         _synthFilter.process(juce::dsp::ProcessContextReplacing<float>(block));
     }
-    
+
     if (crusherPower)
     {
         _bitCrusher.processBuffer(buffer);
     }
-    
+
     if (verbPower)
     {
         _reverb.process(juce::dsp::ProcessContextReplacing<float>(block));
         _reverbCompensate.process(juce::dsp::ProcessContextReplacing<float>(block));
         _reverbVolume.process(juce::dsp::ProcessContextReplacing<float>(block));
     }
-    
+
     // safe clip
     viator_utils::utils::hardClipBlock(block);
+}
+
+void ViatorfrankenfreakAudioProcessor::arpeggiate(juce::AudioBuffer<float>& buffer, juce::MidiBuffer &midiMessages)
+{
+    // however we use the buffer to get timing information
+    auto numSamples = buffer.getNumSamples();
+
+    // get note duration
+    auto noteDuration = static_cast<int> (std::ceil (rate * 0.25f * (0.1f + (1.0f - (0.5)))));
+
+    for (const auto metadata : midiMessages)
+    {
+        const auto msg = metadata.getMessage();
+        if      (msg.isNoteOn())  notes.add (msg.getNoteNumber());
+        else if (msg.isNoteOff()) notes.removeValue (msg.getNoteNumber());
+    }
+
+    midiMessages.clear();
+
+    if ((time + numSamples) >= noteDuration)
+    {
+        auto offset = juce::jmax (0, juce::jmin ((int) (noteDuration - time), numSamples - 1));
+
+        if (lastNoteValue > 0)
+        {
+            midiMessages.addEvent (juce::MidiMessage::noteOff (1, lastNoteValue), offset);
+            lastNoteValue = -1;
+        }
+
+        if (notes.size() > 0)
+        {
+            currentNote = (currentNote + 1) % notes.size();
+            lastNoteValue = notes[currentNote];
+            midiMessages.addEvent (juce::MidiMessage::noteOn  (1, lastNoteValue, (uint8_t) 127), offset);
+        }
+    }
+
+    time = (time + numSamples) % noteDuration;
 }
 
 //==============================================================================
