@@ -60,11 +60,27 @@ private:
     juce::dsp::Gain<float> _reverbCompensate;
     juce::dsp::Gain<float> _reverbVolume;
     
+    enum class ArpDirection
+    {
+      kForward,
+      kRandom,
+      kBackward
+    };
+    
+    ArpDirection _arpDirection = ArpDirection::kForward;
+    
     juce::SortedSet<int> notes;
     int currentNote, lastNoteValue;
     int time;
     float rate;
     void arpeggiate(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages, float arpSpeed);
+    juce::Optional<double> projectBPM;
+    double bpm = 120.0;
+    juce::Optional<juce::AudioPlayHead::PositionInfo> positionInfo;
+    int phaseOffsetSamples {0};
+    int accumulatedTime {0};
+    double quarterNoteDuration {0};
+    int samplePosition {0};
     
     // parameters
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();

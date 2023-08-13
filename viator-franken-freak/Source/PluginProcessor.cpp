@@ -192,6 +192,7 @@ void ViatorfrankenfreakAudioProcessor::parameterChanged(const juce::String &para
 
 void ViatorfrankenfreakAudioProcessor::updateParameters()
 {
+    // synth
     auto attack = _treeState.getRawParameterValue(ViatorParameters::attackID)->load();
     auto decay = _treeState.getRawParameterValue(ViatorParameters::decayID)->load();
     auto sustain = _treeState.getRawParameterValue(ViatorParameters::sustainID)->load();
@@ -223,11 +224,13 @@ void ViatorfrankenfreakAudioProcessor::updateParameters()
         }
     }
 
+    // filter
     auto filterCutoff = _treeState.getRawParameterValue(ViatorParameters::ladderCutoffID)->load();
     auto filterReso = _treeState.getRawParameterValue(ViatorParameters::ladderResoID)->load();
     _synthFilter.setCutoffFrequencyHz(filterCutoff);
     _synthFilter.setResonance(filterReso);
     
+    // fx
     auto bitDepth = _treeState.getRawParameterValue(ViatorParameters::crusherBitDepthID)->load();
     auto crusherMix = _treeState.getRawParameterValue(ViatorParameters::crusherMixID)->load();
     auto drive = _treeState.getRawParameterValue(ViatorParameters::ladderDriveID)->load();
@@ -248,6 +251,10 @@ void ViatorfrankenfreakAudioProcessor::updateParameters()
     _reverbParams.dryLevel = 1.0;
     _reverb.setParameters(_reverbParams);
     _reverbVolume.setGainDecibels(verbVolume);
+    
+    // arp
+    auto arpDir = _treeState.getRawParameterValue(ViatorParameters::arpDirID)->load();
+    _arpDirection = static_cast<ArpDirection>(arpDir);
 }
 
 //==============================================================================
@@ -329,14 +336,14 @@ void ViatorfrankenfreakAudioProcessor::processBlock (juce::AudioBuffer<float>& b
     auto verbPower = _treeState.getRawParameterValue(ViatorParameters::verbPowerID)->load();
     auto arpPower = _treeState.getRawParameterValue(ViatorParameters::arpPowerID)->load();
     auto arpSpeed = _treeState.getRawParameterValue(ViatorParameters::arpSpeedID)->load();
-    
+                
     if (arpPower)
     {
         arpeggiate(buffer, midiMessages, arpSpeed);
     }
     
     _frankenFreak.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
-
+ 
     if (filterPower)
     {
         _synthFilter.process(juce::dsp::ProcessContextReplacing<float>(block));
@@ -363,7 +370,7 @@ void ViatorfrankenfreakAudioProcessor::arpeggiate(juce::AudioBuffer<float>& buff
     // however we use the buffer to get timing information
     auto numSamples = buffer.getNumSamples();
 
-    // get note duration
+    // Calculate the note duration based on a fixed musical note length (e.g., quarter note)
     auto noteDuration = static_cast<int> (std::ceil (rate * 0.25f * (0.1f + (1.0f - (arpSpeed)))));
 
     for (const auto metadata : midiMessages)
@@ -374,7 +381,7 @@ void ViatorfrankenfreakAudioProcessor::arpeggiate(juce::AudioBuffer<float>& buff
     }
 
     midiMessages.clear();
-
+    
     if ((time + numSamples) >= noteDuration)
     {
         auto offset = juce::jmax (0, juce::jmin ((int) (noteDuration - time), numSamples - 1));
@@ -387,12 +394,26 @@ void ViatorfrankenfreakAudioProcessor::arpeggiate(juce::AudioBuffer<float>& buff
 
         if (notes.size() > 0)
         {
-            currentNote = (currentNote + 1) % notes.size();
+            if (_arpDirection == ArpDirection::kForward)
+            {
+                currentNote = (currentNote + 1) % notes.size();
+            }
+            
+            else if (_arpDirection == ArpDirection::kBackward)
+            {
+                currentNote = (currentNote - 1 + notes.size()) % notes.size();
+            }
+            
+            else
+            {
+                currentNote = juce::Random::getSystemRandom().nextInt (notes.size());
+            }
+            
             lastNoteValue = notes[currentNote];
             midiMessages.addEvent (juce::MidiMessage::noteOn  (1, lastNoteValue, (uint8_t) 127), offset);
         }
     }
-
+    
     time = (time + numSamples) % noteDuration;
 }
 
