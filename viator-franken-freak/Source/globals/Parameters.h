@@ -65,6 +65,7 @@ struct MenuParameterData
         std::vector<ViatorParameters::SliderParameterData>& getLadderSliderParams(){return _ladderSliderParams;};
         std::vector<ViatorParameters::SliderParameterData>& getCrusherSliderParams(){return _crusherSliderParams;};
         std::vector<ViatorParameters::SliderParameterData>& getReverbSliderParams(){return _reverbSliderParams;};
+        std::vector<ViatorParameters::SliderParameterData>& getArpSliderParams(){return _arpSliderParams;};
         
     private:
         // Adds params to the vector
@@ -87,6 +88,7 @@ struct MenuParameterData
         std::vector<ViatorParameters::SliderParameterData> _ladderSliderParams;
         std::vector<ViatorParameters::SliderParameterData> _crusherSliderParams;
         std::vector<ViatorParameters::SliderParameterData> _reverbSliderParams;
+        std::vector<ViatorParameters::SliderParameterData> _arpSliderParams;
         
     };
 }

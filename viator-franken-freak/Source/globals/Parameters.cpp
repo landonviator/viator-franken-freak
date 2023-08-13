@@ -81,6 +81,15 @@ void ViatorParameters::Params::initSliderParams()
     _reverbSliderParams.push_back({ViatorParameters::verbDampID, ViatorParameters::verbDampName, 0.0f, 100.0f, 50.0f, skew::kNoSkew, 0.0, type::kInt});
     _reverbSliderParams.push_back({ViatorParameters::verbMixID, ViatorParameters::verbMixName, 0.0f, 100.0f, 50.0f, skew::kNoSkew, 0.0, type::kInt});
     _reverbSliderParams.push_back({ViatorParameters::verbVolumeID, ViatorParameters::verbVolumeName, -20.0f, 20.0f, 0.0f, skew::kNoSkew, 0.0, type::kFloat});
+    
+    // arp
+    _sliderParams.push_back({ViatorParameters::arpSpeedID, ViatorParameters::arpSpeedName, 0.0f, 1.0f, 0.5f, skew::kNoSkew, 0.0, type::kFloat});
+    _sliderParams.push_back({ViatorParameters::arpDirID, ViatorParameters::arpDirName, 0.0f, 2.0f, 0.0f, skew::kNoSkew, 0.0, type::kInt});
+    _sliderParams.push_back({ViatorParameters::arpOctaveID, ViatorParameters::arpOctaveName, 0.0f, 2.0f, 0.0f, skew::kNoSkew, 0.0, type::kInt});
+    
+    _arpSliderParams.push_back({ViatorParameters::arpSpeedID, ViatorParameters::arpSpeedName, 0.0f, 1.0f, 0.5f, skew::kNoSkew, 0.0, type::kFloat});
+    _arpSliderParams.push_back({ViatorParameters::arpDirID, ViatorParameters::arpDirName, 0.0f, 2.0f, 0.0f, skew::kNoSkew, 0.0, type::kInt});
+    _arpSliderParams.push_back({ViatorParameters::arpOctaveID, ViatorParameters::arpOctaveName, 0.0f, 2.0f, 0.0f, skew::kNoSkew, 0.0, type::kInt});
 }
 
 void ViatorParameters::Params::initButtonParams()
@@ -88,6 +97,7 @@ void ViatorParameters::Params::initButtonParams()
     _buttonParams.push_back({ViatorParameters::filterPowerID, ViatorParameters::filterPowerName, false});
     _buttonParams.push_back({ViatorParameters::crusherPowerID, ViatorParameters::crusherPowerName, false});
     _buttonParams.push_back({ViatorParameters::verbPowerID, ViatorParameters::verbPowerName, false});
+    _buttonParams.push_back({ViatorParameters::arpPowerID, ViatorParameters::arpPowerName, false});
 }
 
 void ViatorParameters::Params::initMenuParams()

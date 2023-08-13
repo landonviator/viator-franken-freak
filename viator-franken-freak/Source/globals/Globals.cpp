@@ -103,4 +103,17 @@ extern const juce::String verbMixName = "Mix";
 
 extern const juce::String verbPowerID = "verbPowerID";
 extern const juce::String verbPowerName = "Power";
+
+// arp
+extern const juce::String arpSpeedID = "arpSpeedID";
+extern const juce::String arpSpeedName = "Speed";
+
+extern const juce::String arpDirID = "arpDirID";
+extern const juce::String arpDirName = "Direction";
+
+extern const juce::String arpOctaveID = "arpOctaveID";
+extern const juce::String arpOctaveName = "Octave";
+
+extern const juce::String arpPowerID = "arpPowerID";
+extern const juce::String arpPowerName = "Power";
 }

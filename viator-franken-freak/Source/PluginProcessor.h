@@ -64,7 +64,7 @@ private:
     int currentNote, lastNoteValue;
     int time;
     float rate;
-    void arpeggiate(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages);
+    void arpeggiate(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages, float arpSpeed);
     
     // parameters
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();

@@ -132,7 +132,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout ViatorfrankenfreakAudioProce
 
         if (param.isInt == ViatorParameters::SliderParameterData::NumericType::kInt)
         {
-            params.push_back (std::make_unique<juce::AudioProcessorValueTreeState::Parameter>(juce::ParameterID { param.paramID, _versionNumber }, param.paramName, param.paramName, range, param.initial, valueToTextFunction, textToValueFunction));
+            int rangeStart = static_cast<int>(range.start);
+            int rangeEnd = static_cast<int>(range.end);
+            params.push_back (std::make_unique<juce::AudioParameterInt>(juce::ParameterID { param.paramID, _versionNumber }, param.paramName, rangeStart, rangeEnd, param.initial));
         }
         
         else
@@ -325,8 +327,14 @@ void ViatorfrankenfreakAudioProcessor::processBlock (juce::AudioBuffer<float>& b
     auto filterPower = _treeState.getRawParameterValue(ViatorParameters::filterPowerID)->load();
     auto crusherPower = _treeState.getRawParameterValue(ViatorParameters::crusherPowerID)->load();
     auto verbPower = _treeState.getRawParameterValue(ViatorParameters::verbPowerID)->load();
+    auto arpPower = _treeState.getRawParameterValue(ViatorParameters::arpPowerID)->load();
+    auto arpSpeed = _treeState.getRawParameterValue(ViatorParameters::arpSpeedID)->load();
     
-    arpeggiate(buffer, midiMessages);
+    if (arpPower)
+    {
+        arpeggiate(buffer, midiMessages, arpSpeed);
+    }
+    
     _frankenFreak.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
     if (filterPower)
@@ -350,13 +358,13 @@ void ViatorfrankenfreakAudioProcessor::processBlock (juce::AudioBuffer<float>& b
     viator_utils::utils::hardClipBlock(block);
 }
 
-void ViatorfrankenfreakAudioProcessor::arpeggiate(juce::AudioBuffer<float>& buffer, juce::MidiBuffer &midiMessages)
+void ViatorfrankenfreakAudioProcessor::arpeggiate(juce::AudioBuffer<float>& buffer, juce::MidiBuffer &midiMessages, float arpSpeed)
 {
     // however we use the buffer to get timing information
     auto numSamples = buffer.getNumSamples();
 
     // get note duration
-    auto noteDuration = static_cast<int> (std::ceil (rate * 0.25f * (0.1f + (1.0f - (0.5)))));
+    auto noteDuration = static_cast<int> (std::ceil (rate * 0.25f * (0.1f + (1.0f - (arpSpeed)))));
 
     for (const auto metadata : midiMessages)
     {

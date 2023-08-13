@@ -9,6 +9,7 @@ ViatorfrankenfreakAudioProcessorEditor::ViatorfrankenfreakAudioProcessorEditor (
 , _modComp(audioProcessor)
 , _filterComp(audioProcessor)
 , _fxComp(audioProcessor)
+, _arpComp(audioProcessor)
 {
     // header
     addAndMakeVisible(_headerComp);
@@ -30,6 +31,9 @@ ViatorfrankenfreakAudioProcessorEditor::ViatorfrankenfreakAudioProcessorEditor (
     
     // fx comp
     addAndMakeVisible(_fxComp);
+    
+    // arp
+    addAndMakeVisible(_arpComp);
     
     // window
     viator_utils::PluginWindow::setPluginWindowSize(0, 0, *this, 1.5, 1.0);
@@ -85,6 +89,7 @@ void ViatorfrankenfreakAudioProcessorEditor::resized()
     const auto arpXMult = 0.05;
     const auto arpX = _effectsArea.getRight() + _effectsArea.getWidth() * arpXMult;
     _arpArea.setBounds(arpX, effectsY, _effectsArea.getWidth(), osc1AreaHeight * effectsHeightMult);
+    _arpComp.setBounds(arpX, effectsY, _effectsArea.getWidth(), osc1AreaHeight * effectsHeightMult);
     
     // adsr
     const auto adsrWidthMult = 0.075;

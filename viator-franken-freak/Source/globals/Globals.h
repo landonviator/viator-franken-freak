@@ -104,4 +104,17 @@ extern const juce::String verbMixName;
 
 extern const juce::String verbPowerID;
 extern const juce::String verbPowerName;
+
+// arp
+extern const juce::String arpSpeedID;
+extern const juce::String arpSpeedName;
+
+extern const juce::String arpDirID;
+extern const juce::String arpDirName;
+
+extern const juce::String arpOctaveID;
+extern const juce::String arpOctaveName;
+
+extern const juce::String arpPowerID;
+extern const juce::String arpPowerName;
 }
