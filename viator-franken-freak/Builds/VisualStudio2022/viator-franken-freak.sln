@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio Version 17
+
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "viator-franken-freak - Standalone Plugin", "viator-franken-freak_StandalonePlugin.vcxproj", "{F2426288-59E4-07AD-9E90-5767EA1B7CD2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2E8E67FE-4AC8-0836-253B-FB76C6BED366} = {2E8E67FE-4AC8-0836-253B-FB76C6BED366}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "viator-franken-freak - VST3", "viator-franken-freak_VST3.vcxproj", "{03A666B0-5E05-6865-8EED-6D38C1F891BC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2E8E67FE-4AC8-0836-253B-FB76C6BED366} = {2E8E67FE-4AC8-0836-253B-FB76C6BED366}
+		{D10008D7-A5A3-F897-3ADE-ACF817BE36B1} = {D10008D7-A5A3-F897-3ADE-ACF817BE36B1}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "viator-franken-freak - Shared Code", "viator-franken-freak_SharedCode.vcxproj", "{2E8E67FE-4AC8-0836-253B-FB76C6BED366}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "viator-franken-freak - VST3 Manifest Helper", "viator-franken-freak_VST3ManifestHelper.vcxproj", "{D10008D7-A5A3-F897-3ADE-ACF817BE36B1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{03A666B0-5E05-6865-8EED-6D38C1F891BC}.Debug|x64.ActiveCfg = Debug|x64
+		{03A666B0-5E05-6865-8EED-6D38C1F891BC}.Debug|x64.Build.0 = Debug|x64
+		{03A666B0-5E05-6865-8EED-6D38C1F891BC}.Release|x64.ActiveCfg = Release|x64
+		{03A666B0-5E05-6865-8EED-6D38C1F891BC}.Release|x64.Build.0 = Release|x64
+		{F2426288-59E4-07AD-9E90-5767EA1B7CD2}.Debug|x64.ActiveCfg = Debug|x64
+		{F2426288-59E4-07AD-9E90-5767EA1B7CD2}.Debug|x64.Build.0 = Debug|x64
+		{F2426288-59E4-07AD-9E90-5767EA1B7CD2}.Release|x64.ActiveCfg = Release|x64
+		{F2426288-59E4-07AD-9E90-5767EA1B7CD2}.Release|x64.Build.0 = Release|x64
+		{2E8E67FE-4AC8-0836-253B-FB76C6BED366}.Debug|x64.ActiveCfg = Debug|x64
+		{2E8E67FE-4AC8-0836-253B-FB76C6BED366}.Debug|x64.Build.0 = Debug|x64
+		{2E8E67FE-4AC8-0836-253B-FB76C6BED366}.Release|x64.ActiveCfg = Release|x64
+		{2E8E67FE-4AC8-0836-253B-FB76C6BED366}.Release|x64.Build.0 = Release|x64
+		{D10008D7-A5A3-F897-3ADE-ACF817BE36B1}.Debug|x64.ActiveCfg = Debug|x64
+		{D10008D7-A5A3-F897-3ADE-ACF817BE36B1}.Debug|x64.Build.0 = Debug|x64
+		{D10008D7-A5A3-F897-3ADE-ACF817BE36B1}.Release|x64.ActiveCfg = Release|x64
+		{D10008D7-A5A3-F897-3ADE-ACF817BE36B1}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
