@@ -73,7 +73,9 @@ private:
     int currentNote, lastNoteValue;
     int time;
     float rate;
-    void arpeggiate(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages, float arpSpeed);
+    void arpeggiate(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages, float arpSpeed, float numOctaves);
+    void populateArp(juce::MidiBuffer& midiMessages, float numOctaves);
+    int lastNumOctaves = 1;
     juce::Optional<double> projectBPM;
     double bpm = 120.0;
     juce::Optional<juce::AudioPlayHead::PositionInfo> positionInfo;

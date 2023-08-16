@@ -5,6 +5,7 @@ Osc2Comp::Osc2Comp(ViatorfrankenfreakAudioProcessor& p) : audioProcessor(p)
 {
     setMenuProps();
     setSliderProps();
+    setPowerButtonProps();
 }
 
 Osc2Comp::~Osc2Comp()
@@ -40,6 +41,15 @@ void Osc2Comp::resized()
         dial->setBounds(sliderX, sliderY, sliderWidth, sliderWidth);
         sliderX += sliderWidth;
     }
+    
+    // buttons
+    const auto btnSize = _editorWidth * 0.035;
+    const auto btnX = getWidth() - btnSize;
+    const auto btnY = 0;
+    for (auto& btn : _powerButtons)
+    {
+        btn->setBounds(btnX, btnY, btnSize, btnSize);
+    }
 }
 
 void Osc2Comp::setSliderProps()
@@ -73,4 +83,13 @@ void Osc2Comp::setMenuProps()
     _oscMenu.setMenuShouldHover(false);
     _oscMenu.addItemList(params.getMenuParams()[0].choices, 1);
     _menuAttach = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(audioProcessor._treeState, params.getMenuParams()[1].paramID, _oscMenu);
+}
+
+void Osc2Comp::setPowerButtonProps()
+{
+    auto btnImageOff = juce::ImageCache::getFromMemory(BinaryData::led_off_png, BinaryData::led_off_pngSize);
+    auto btnImageOn = juce::ImageCache::getFromMemory(BinaryData::led_on_png, BinaryData::led_on_pngSize);
+    _powerButtons.add(std::make_unique<viator_gui::ImageButton>(btnImageOff, btnImageOn, "", ""));
+    _powerButtonAttachments.add(std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor._treeState, ViatorParameters::osc2PowerID, _powerButtons[0]->getButton()));
+    addAndMakeVisible(*_powerButtons[0]);
 }

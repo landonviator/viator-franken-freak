@@ -60,6 +60,9 @@ private:
     juce::Rectangle<int> _filterArea;
     
     juce::Colour _offWhite = juce::Colours::whitesmoke.withAlpha(0.5f);
+    
+    float _editorWidth = 0.0f;
+    float getEditorWidth(){return _editorWidth;};
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ViatorfrankenfreakAudioProcessorEditor)
 };

@@ -186,6 +186,11 @@ void ViatorfrankenfreakAudioProcessor::parameterChanged(const juce::String &para
         _synthFilter.setMode(static_cast<juce::dsp::LadderFilter<float>::Mode>(filterType));
     }
     
+    if (parameterID == ViatorParameters::arpOctaveID)
+    {
+        notes.clear();
+    }
+    
     updateParameters();
     
 }
@@ -336,12 +341,14 @@ void ViatorfrankenfreakAudioProcessor::processBlock (juce::AudioBuffer<float>& b
     auto verbPower = _treeState.getRawParameterValue(ViatorParameters::verbPowerID)->load();
     auto arpPower = _treeState.getRawParameterValue(ViatorParameters::arpPowerID)->load();
     auto arpSpeed = _treeState.getRawParameterValue(ViatorParameters::arpSpeedID)->load();
-                
+    auto numOctaves = _treeState.getRawParameterValue(ViatorParameters::arpOctaveID)->load();
+    
     if (arpPower)
     {
-        arpeggiate(buffer, midiMessages, arpSpeed);
+        populateArp(midiMessages, numOctaves);
+        arpeggiate(buffer, midiMessages, arpSpeed, numOctaves);
     }
-    
+                
     _frankenFreak.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
  
     if (filterPower)
@@ -365,7 +372,7 @@ void ViatorfrankenfreakAudioProcessor::processBlock (juce::AudioBuffer<float>& b
     viator_utils::utils::hardClipBlock(block);
 }
 
-void ViatorfrankenfreakAudioProcessor::arpeggiate(juce::AudioBuffer<float>& buffer, juce::MidiBuffer &midiMessages, float arpSpeed)
+void ViatorfrankenfreakAudioProcessor::arpeggiate(juce::AudioBuffer<float>& buffer, juce::MidiBuffer &midiMessages, float arpSpeed, float numOctaves)
 {
     // however we use the buffer to get timing information
     auto numSamples = buffer.getNumSamples();
@@ -373,15 +380,6 @@ void ViatorfrankenfreakAudioProcessor::arpeggiate(juce::AudioBuffer<float>& buff
     // Calculate the note duration based on a fixed musical note length (e.g., quarter note)
     auto noteDuration = static_cast<int> (std::ceil (rate * 0.25f * (0.1f + (1.0f - (arpSpeed)))));
 
-    for (const auto metadata : midiMessages)
-    {
-        const auto msg = metadata.getMessage();
-        if      (msg.isNoteOn())  notes.add (msg.getNoteNumber());
-        else if (msg.isNoteOff()) notes.removeValue (msg.getNoteNumber());
-    }
-
-    midiMessages.clear();
-    
     if ((time + numSamples) >= noteDuration)
     {
         auto offset = juce::jmax (0, juce::jmin ((int) (noteDuration - time), numSamples - 1));
@@ -415,6 +413,32 @@ void ViatorfrankenfreakAudioProcessor::arpeggiate(juce::AudioBuffer<float>& buff
     }
     
     time = (time + numSamples) % noteDuration;
+}
+
+void ViatorfrankenfreakAudioProcessor::populateArp(juce::MidiBuffer &midiMessages, float numOctaves)
+{
+    // add notes including the octaves to the array
+    for (int octaveOffset = 0; octaveOffset < numOctaves; ++octaveOffset)
+    {
+        for (const auto metadata : midiMessages)
+        {
+            const auto msg = metadata.getMessage();
+            
+            if (msg.isNoteOn())
+            {
+                int noteValue = msg.getNoteNumber() + (octaveOffset * 12); // Add octave offset in semitones
+                notes.add(noteValue);
+            }
+            
+            else if (msg.isNoteOff())
+            {
+                int noteValue = msg.getNoteNumber() + (octaveOffset * 12); // Add octave offset in semitones
+                notes.removeValue(noteValue);
+            }
+        }
+    }
+    
+    midiMessages.clear();
 }
 
 //==============================================================================

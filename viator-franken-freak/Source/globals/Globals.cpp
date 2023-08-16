@@ -13,6 +13,9 @@ extern const juce::String osc1TimbreName = "Tone";
 extern const juce::String osc1GainID = "osc1GainID";
 extern const juce::String osc1GainName = "Gain";
 
+extern const juce::String osc1PowerID = "osc1PowerID";
+extern const juce::String osc1PowerName = "Power";
+
 // osc 2
 extern const juce::String osc2TuneID = "osc2TuneID";
 extern const juce::String osc2TuneName = "Tune";
@@ -22,6 +25,9 @@ extern const juce::String osc2TimbreName = "Tone";
 
 extern const juce::String osc2GainID = "osc2GainID";
 extern const juce::String osc2GainName = "Gain";
+
+extern const juce::String osc2PowerID = "osc2PowerID";
+extern const juce::String osc2PowerName = "Power";
 
 // adsr
 extern const juce::String attackID = "attackID";
@@ -58,6 +64,9 @@ extern const juce::String driftDepthName = "Depth";
 
 extern const juce::String amOscChoiceID = "amOscChoiceID";
 extern const juce::String amOscChoiceName = "AM Choice";
+
+extern const juce::String modPowerID = "modPowerID";
+extern const juce::String modPowerName = "Power";
 
 // filter
 extern const juce::String ladderCutoffID = "ladderCutoffID";

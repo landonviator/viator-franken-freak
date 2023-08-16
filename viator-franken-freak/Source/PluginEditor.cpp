@@ -59,6 +59,8 @@ void ViatorfrankenfreakAudioProcessorEditor::paint (juce::Graphics& g)
 
 void ViatorfrankenfreakAudioProcessorEditor::resized()
 {
+    _editorWidth = getWidth();
+    
     // header
     const auto headerHeightMult = 0.1;
     const auto headerHeight = getHeight() * headerHeightMult;
@@ -70,12 +72,14 @@ void ViatorfrankenfreakAudioProcessorEditor::resized()
     const auto osc1AreaWidth = getWidth() * 0.25;
     const auto osc1AreaHeight = getHeight() * 0.2;
     _osc1Area.setBounds(osc1AreaX, osc1AreaY, osc1AreaWidth, osc1AreaHeight);
+    _osc1Comp.setEditorWidth(_editorWidth);
     _osc1Comp.setBounds(osc1AreaX, osc1AreaY, osc1AreaWidth, osc1AreaHeight);
     
     // osc 2
     const auto osc2YMult = 0.125;
     const auto osc2AreaY = _osc1Area.getBottom() + osc1AreaHeight * osc2YMult;
     _osc2Area.setBounds(osc1AreaX, osc2AreaY, osc1AreaWidth, osc1AreaHeight);
+    _osc2Comp.setEditorWidth(_editorWidth);
     _osc2Comp.setBounds(osc1AreaX, osc2AreaY, osc1AreaWidth, osc1AreaHeight);
     
     // fx
@@ -89,6 +93,7 @@ void ViatorfrankenfreakAudioProcessorEditor::resized()
     const auto arpXMult = 0.05;
     const auto arpX = _effectsArea.getRight() + _effectsArea.getWidth() * arpXMult;
     _arpArea.setBounds(arpX, effectsY, _effectsArea.getWidth(), osc1AreaHeight * effectsHeightMult);
+    _arpComp.setEditorWidth(_editorWidth);
     _arpComp.setBounds(arpX, effectsY, _effectsArea.getWidth(), osc1AreaHeight * effectsHeightMult);
     
     // adsr
@@ -102,8 +107,10 @@ void ViatorfrankenfreakAudioProcessorEditor::resized()
     const auto modX = _adsrArea.getRight() + _osc1Area.getWidth() * adsrWidthMult;
     const auto filterWidthMult = 1.06;
     _modArea.setBounds(modX, osc1AreaY, osc1AreaWidth * filterWidthMult, osc1AreaHeight);
+    _modComp.setEditorWidth(_editorWidth);
     _modComp.setBounds(modX, osc1AreaY, osc1AreaWidth * filterWidthMult, osc1AreaHeight);
     
     _filterArea.setBounds(modX, osc2AreaY, osc1AreaWidth * filterWidthMult, osc1AreaHeight);
+    _filterComp.setEditorWidth(_editorWidth);
     _filterComp.setBounds(modX, osc2AreaY, osc1AreaWidth * filterWidthMult, osc1AreaHeight);
 }

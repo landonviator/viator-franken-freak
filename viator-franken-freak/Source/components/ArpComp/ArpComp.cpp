@@ -29,9 +29,9 @@ void ArpComp::resized()
     }
     
     // buttons
-    const auto btnX = getWidth() * 0.89;
-    auto btnY = getHeight() * 0.03;
-    const auto btnSize = getWidth() * 0.1;
+    const auto btnSize = _editorWidth * 0.035;
+    const auto btnX = getWidth() - btnSize;
+    const auto btnY = 0;
     for (auto& btn : _powerButtons)
     {
         btn->setBounds(btnX, btnY, btnSize, btnSize);
