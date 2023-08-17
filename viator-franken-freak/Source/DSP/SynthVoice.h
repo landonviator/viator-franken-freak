@@ -21,6 +21,8 @@ public:
     void setOscTimbre(float newTimbre, float newTimbre2);
     void setOscAmParams(float newAmFreq, float newAmDepth, float newDrift, float newDriftDepth);
     
+    void setPower(bool osc1Power, bool osc2Power, bool oscMod1Power, bool oscMod2Power);
+    
     enum class OscType
     {
         kSin,
@@ -39,6 +41,7 @@ private:
     juce::ADSR::Parameters _adsrParams2;
     
     float sinCompensate = 0.3;
+    float sinTimbreCompensate = 1.0;
     
     // osc 1
     juce::dsp::Oscillator<float> _mainOsc {[this](float x){return std::sin(x) * sinCompensate;}};
@@ -49,8 +52,8 @@ private:
     float gain             {0.0};
     float gainCompensate   {0.0};
     int   tune             {0};
-    float timbre           {1.0};
-    float timbreCompensate {0.55};
+    juce::SmoothedValue<float> timbre           {1.0};
+    juce::SmoothedValue<float> timbreCompensate {0.55};
     float waveCompensate   {0.25};
     float softCoeffA       {1.5};
     float softCoeffB       {-0.5};
@@ -66,8 +69,8 @@ private:
     float gain2             {0.0};
     float gainCompensate2   {0.0};
     int   tune2             {0};
-    float timbre2           {1.0};
-    float timbreCompensate2 {0.55};
+    juce::SmoothedValue<float> timbre2           {1.0};
+    juce::SmoothedValue<float> timbreCompensate2 {0.55};
     float waveCompensate2   {0.25};
     viator_dsp::SVFilter<float> _timbreFilter2;
     float softCoeffA2       {1.5};
@@ -83,9 +86,16 @@ private:
     float _driftDepth = 1.0;
     float _driftFreq = 1.0;
     
-    void applyTimbre(juce::dsp::AudioBlock<float>& block, float timbre, float timreCompensate);
+    void applyTimbre(juce::dsp::AudioBlock<float>& block);
+    void applyTimbre2(juce::dsp::AudioBlock<float>& block);
     void applyAM(juce::dsp::AudioBlock<float>& block, float depth, juce::dsp::Oscillator<float>& modulator);
-    void applyDrift(juce::AudioBuffer<float>& buffer, juce::dsp::Oscillator<float>& carrier, juce::dsp::Oscillator<float>& modulator, float carrierFreq, float driftDepth);
+    void applyDrift1();
+    void applyDrift2();
     
     static constexpr float _piInv = 1.0 / juce::MathConstants<float>::pi;
+    
+    bool _osc1Power = true;
+    bool _osc2Power = true;
+    bool _oscMod1Power = false;
+    bool _oscMod2Power = false;
 };

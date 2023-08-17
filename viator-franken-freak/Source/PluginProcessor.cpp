@@ -216,16 +216,20 @@ void ViatorfrankenfreakAudioProcessor::updateParameters()
     auto driftFreq = _treeState.getRawParameterValue(ViatorParameters::driftFreqID)->load();
     auto driftDepth = _treeState.getRawParameterValue(ViatorParameters::driftDepthID)->load();
     
+    auto osc1Power = _treeState.getRawParameterValue(ViatorParameters::osc1PowerID)->load();
+    auto osc2Power = _treeState.getRawParameterValue(ViatorParameters::osc2PowerID)->load();
+    auto oscModPower = _treeState.getRawParameterValue(ViatorParameters::modPowerID)->load();
+    
     for (int i = 0; i < _frankenFreak.getNumVoices(); i++)
     {
         if (auto voice = dynamic_cast<FrankenSynthVoice*>(_frankenFreak.getVoice(i)))
         {
-            voice->setADSRParams(attack, decay, sustain, release);
-            
             voice->setOscParams(osc1Volume, osc2Volume);
-            voice->setOscTune(osc1Tune, osc2Tune);
             voice->setOscTimbre(osc1Timbre, osc2Timbre);
+            voice->setOscTune(osc1Tune, osc2Tune);
             voice->setOscAmParams(amFreq, amDepth, driftFreq, driftDepth);
+            voice->setADSRParams(attack, decay, sustain, release);
+            voice->setPower(osc1Power, osc2Power, oscModPower, oscModPower);
         }
     }
 
@@ -335,41 +339,43 @@ bool ViatorfrankenfreakAudioProcessor::isBusesLayoutSupported (const BusesLayout
 
 void ViatorfrankenfreakAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    juce::dsp::AudioBlock<float> block {buffer};
-    auto filterPower = _treeState.getRawParameterValue(ViatorParameters::filterPowerID)->load();
-    auto crusherPower = _treeState.getRawParameterValue(ViatorParameters::crusherPowerID)->load();
-    auto verbPower = _treeState.getRawParameterValue(ViatorParameters::verbPowerID)->load();
-    auto arpPower = _treeState.getRawParameterValue(ViatorParameters::arpPowerID)->load();
-    auto arpSpeed = _treeState.getRawParameterValue(ViatorParameters::arpSpeedID)->load();
-    auto numOctaves = _treeState.getRawParameterValue(ViatorParameters::arpOctaveID)->load();
+    //updateParameters();
     
-    if (arpPower)
-    {
-        populateArp(midiMessages, numOctaves);
-        arpeggiate(buffer, midiMessages, arpSpeed, numOctaves);
-    }
+    //juce::dsp::AudioBlock<float> block {buffer};
+//    auto filterPower = _treeState.getRawParameterValue(ViatorParameters::filterPowerID)->load();
+//    auto crusherPower = _treeState.getRawParameterValue(ViatorParameters::crusherPowerID)->load();
+//    auto verbPower = _treeState.getRawParameterValue(ViatorParameters::verbPowerID)->load();
+//    auto arpPower = _treeState.getRawParameterValue(ViatorParameters::arpPowerID)->load();
+//    auto arpSpeed = _treeState.getRawParameterValue(ViatorParameters::arpSpeedID)->load();
+//    auto numOctaves = _treeState.getRawParameterValue(ViatorParameters::arpOctaveID)->load();
+//
+//    if (arpPower)
+//    {
+//        populateArp(midiMessages, numOctaves);
+//        arpeggiate(buffer, midiMessages, arpSpeed, numOctaves);
+//    }
                 
     _frankenFreak.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
  
-    if (filterPower)
-    {
-        _synthFilter.process(juce::dsp::ProcessContextReplacing<float>(block));
-    }
-
-    if (crusherPower)
-    {
-        _bitCrusher.processBuffer(buffer);
-    }
-
-    if (verbPower)
-    {
-        _reverb.process(juce::dsp::ProcessContextReplacing<float>(block));
-        _reverbCompensate.process(juce::dsp::ProcessContextReplacing<float>(block));
-        _reverbVolume.process(juce::dsp::ProcessContextReplacing<float>(block));
-    }
-
-    // safe clip
-    viator_utils::utils::hardClipBlock(block);
+//    if (filterPower)
+//    {
+//        _synthFilter.process(juce::dsp::ProcessContextReplacing<float>(block));
+//    }
+//
+//    if (crusherPower)
+//    {
+//        _bitCrusher.processBuffer(buffer);
+//    }
+//
+//    if (verbPower)
+//    {
+//        _reverb.process(juce::dsp::ProcessContextReplacing<float>(block));
+//        _reverbCompensate.process(juce::dsp::ProcessContextReplacing<float>(block));
+//        _reverbVolume.process(juce::dsp::ProcessContextReplacing<float>(block));
+//    }
+//
+//    // safe clip
+//    viator_utils::utils::hardClipBlock(block);
 }
 
 void ViatorfrankenfreakAudioProcessor::arpeggiate(juce::AudioBuffer<float>& buffer, juce::MidiBuffer &midiMessages, float arpSpeed, float numOctaves)
